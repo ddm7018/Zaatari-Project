@@ -1,4 +1,5 @@
 library(dplyr)
+library(hash)
 
 allzips <- readRDS("data/superzip.rds")
 allzips$latitude <- jitter(allzips$latitude)
@@ -23,3 +24,8 @@ cleantable <- allzips %>%
   )
 
 block <- readRDS("cap_data/block_summary.rds")
+
+colHash <- hash()
+colHash["totalEdupeople"] <- "total_educated"
+colHash["totalpeople"]    <- "total_residents"
+colHash["literacy"] <- "literacy"

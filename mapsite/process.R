@@ -45,12 +45,20 @@ for (x in names){
   count        <- count + 1
 }
 
-#summing at the block level from the asset data and the combining with a coordinates for a final complete table
+#summing at the block level from the asset data and the combining with a coordinates for a final complete 
 assetTable                 <- data.table(joinTable)
-blockSumTable              <- data.frame(assetTable[, list(sum(as.numeric(education_skills.literate)),sum(household.household_member)), by = list(district,collector.block_number)])
+blockSumTable              <- data.frame(assetTable[, list(sum(as.numeric(education_skills.literate)),
+                                                      sum(household.household_member),
+                                                      sum(as.numeric(education_skills.literate))/sum(household.household_member)
+                                                      ),
+                                                      by = list(district,collector.block_number)])
 colnames(blockSumTable)[2] <- "block"
+colnames(blockSumTable)[3] <- "total_educated"
+colnames(blockSumTable)[4] <- "total_residents"
+colnames(blockSumTable)[5] <- "literacy"
+
 mergeTable                 <- merge(x=blockSumTable, y = data, keyby=list("district","block"), all = TRUE)
-cleanFinal                 <- mergeTable[!is.na(mergeTable['V1']),]
+cleanFinal                 <- mergeTable[!is.na(mergeTable['total_residents']),]
 
 saveRDS(cleanFinal,"cap_data/block_summary.rds")
 

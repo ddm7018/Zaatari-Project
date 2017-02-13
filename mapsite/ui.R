@@ -3,7 +3,8 @@ library(leaflet)
 # Choices for drop-downs
 vars <- c(
   "Total Household Residents" = "totalpeople",
-  "Total Educated Residents" = "totalEdupeople"
+  "Total Educated Residents" = "totalEdupeople",
+  "Percentage Education" = "literacy"
 )
 
 navbarPage("Zaatari", id="nav",

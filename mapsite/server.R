@@ -3,6 +3,7 @@ library(RColorBrewer)
 library(scales)
 library(lattice)
 library(dplyr)
+library(hash)
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 # set.seed(100)
@@ -65,25 +66,29 @@ function(input, output, session) {
   observe({
     colorBy   <- input$color
     sizeBy    <- input$size
-    print(colorBy)
-    print(sizeBy)
+    # print(colorBy)
+    # print(sizeBy)
+    # print(colHash[[colorBy]])
+    colorData <- block[[colHash[[colorBy]]]]
+    pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
+    radius    <- block[[colHash[[sizeBy]]]]
     
-    if(colorBy == "totalEdupeople"){
-      colorData <- block[["V2"]]
-      pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
-    }
-    else{
-      colorData <- block[["V1"]]
-      pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
-    }
-    
-    if(sizeBy == "totalpeople"){
-      radius <- block[["V1"]]
-    }
-    else{
-      radius <- block[["V2"]]
-    }
-   
+    # if(colorBy == "totalEdupeople"){
+    #   colorData <- block[["V2"]]
+    #   pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
+    # }
+    # else{
+    #   colorData <- block[["V1"]]
+    #   pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
+    # }
+    # 
+    # if(sizeBy == "totalpeople"){
+    #   radius <- block[["V1"]]
+    # }
+    # else{
+    #   radius <- block[["V2"]]
+    # }
+    # 
     leafletProxy("map", data = block) %>%
       clearShapes() %>%
       addCircles(~long, ~lat, radius = radius,
@@ -100,8 +105,10 @@ function(input, output, session) {
      #print(findDistrict)
      content <- as.character(tagList(
      tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
-     tags$h4("Total Residents: ",findDistrict$V2),
-     tags$h4("Total Educated Residents: ",findDistrict$V1)
+     tags$h4("Total Residents: ",findDistrict$total_residents),
+     tags$h4("Total Educated Residents: ",findDistrict$total_educated),
+     tags$h4("Literacy Rate: ",findDistrict$literacy)
+     
      ))
      leafletProxy("map") %>% addPopups(lng, lat, content, layerId = block)
    }
