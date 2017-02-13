@@ -27,8 +27,8 @@ navbarPage("Zaatari", id="nav",
 
         h2("Explorer"),
 
-        selectInput("color", "Color", vars, selected = "totalEdupeople"),
-        selectInput("size", "Size", vars, selected = "totalpeople"),
+        selectInput("color", "Color", vars, selected = "total_residents"),
+        selectInput("size", "Size", vars, selected = "total_educated"),
         conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
           # Only prompt for threshold when coloring or sizing by superzip
           numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
