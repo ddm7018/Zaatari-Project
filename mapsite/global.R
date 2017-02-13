@@ -22,8 +22,4 @@ cleantable <- allzips %>%
     Long = longitude
   )
 
-
-asset <- readRDS("cap_data/data.rds")
-
-block <- readRDS("cap_data/coord.rds")
-block1 <- readRDS("cap_data/coord1.rds")
+block <- readRDS("cap_data/block_summary.rds")
