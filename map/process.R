@@ -10,6 +10,14 @@ d9          <- read.csv("cap_data/d9.csv")
 d2$district <- "2"
 d8$district <- "8"
 d9$district <- "9"
+d2$information.age_informant <- as.character(d2$information.age_informant)
+d8$information.age_informant <- as.character(d8$information.age_informant)
+d9$information.age_informant <- as.character(d9$information.age_informant)
+d2$information.age_informant[d2$information.age_informant == "15_24"] <- "20"
+d2$information.age_informant[d2$information.age_informant == "25_44"] <- "34"
+d2$information.age_informant[d2$information.age_informant == "45_64"] <- "55"
+d2$information.age_informant[d2$information.age_informant == "64_"] <- "65"
+
 joinTable   <- smartbind(d2,d8)
 joinTable   <- smartbind(joinTable,d9)
 
@@ -48,14 +56,16 @@ for (x in names){
 #summing at the block level from the asset data and the combining with a coordinates for a final complete 
 assetTable                 <- data.table(joinTable)
 blockSumTable              <- data.frame(assetTable[, list(sum(as.numeric(education_skills.literate)),
-                                                      sum(household.household_member),
-                                                      sum(as.numeric(education_skills.literate))/sum(household.household_member)*100
-                                                      ),
+                                                      eval(parse(text = 'sum(household.household_member)')),
+                                                      sum(as.numeric(education_skills.literate))/sum(household.household_member)*100,
+                                                      mean(as.numeric(information.age_informant))),
                                                       by = list(district,collector.block_number)])
 colnames(blockSumTable)[2] <- "block"
 colnames(blockSumTable)[3] <- "total_educated"
 colnames(blockSumTable)[4] <- "total_residents"
 colnames(blockSumTable)[5] <- "literacy"
+colnames(blockSumTable)[6] <- "avg_info_source"
+
 
 mergeTable                 <- merge(x=blockSumTable, y = data, keyby=list("district","block"), all = TRUE)
 cleanFinal                 <- mergeTable[!is.na(mergeTable['total_residents']),]

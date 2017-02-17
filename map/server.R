@@ -70,7 +70,12 @@ function(input, output, session) {
     # print(sizeBy)
     # print(colHash[[colorBy]])
     colorData <- block[[colHash[[colorBy]]]]
-    pal       <- colorQuantile("Spectral", colorData, 7)
+    if (colorBy == 'avg_info_source'){
+    pal       <- colorBin("Spectral", colorData, 7)
+    }
+    else{
+      pal       <- colorQuantile("Spectral", colorData, 7)
+    }
     radius    <- block[[colHash[[sizeBy]]]]
     
     # if(colorBy == "totalEdupeople"){
@@ -107,7 +112,9 @@ function(input, output, session) {
      tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
      tags$h4("Total Residents: ",findDistrict$total_residents),
      tags$h4("Total Educated Residents: ",findDistrict$total_educated),
-     tags$h4("Literacy Rate: ",findDistrict$literacy)
+     tags$h4("Literacy Rate: ",round(findDistrict$literacy,2)),
+     tags$h4("Average Information Source Age: ",findDistrict$avg_info_source)
+     
      
      ))
      leafletProxy("map") %>% addPopups(lng, lat, content, layerId = block)

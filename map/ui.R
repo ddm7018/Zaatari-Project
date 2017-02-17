@@ -4,7 +4,8 @@ library(leaflet)
 vars <- c(
   "Total Household Residents" = "total_residents",
   "Total Educated Residents" = "total_educated",
-  "Percentage Education" = "literacy"
+  "Percentage Education" = "literacy",
+  "Average Information Source" = "avg_info_source"
 )
 
 navbarPage("Zaatari", id="nav",
@@ -21,7 +22,7 @@ navbarPage("Zaatari", id="nav",
       leafletOutput("map", width="100%", height="100%"),
 
       # Shiny versions prior to 0.11 should use class="modal" instead.
-      absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+      absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
 
@@ -48,10 +49,14 @@ navbarPage("Zaatari", id="nav",
     hr(),
     DT::dataTableOutput("assetTable")),
     
-    tabPanel("Summary Data",
-             hr(),
-             DT::dataTableOutput("sumTable")
+  tabPanel("Summary Data",
+  hr(),
+  DT::dataTableOutput("sumTable")
     
+  ),
+  tabPanel("R Console", tags$div(HTML("<iframe width='100%' height='300' src='http://r-fiddle.org/#/embed/eYsWfghB/1' allowfullscreen='allowfullscreen' frameborder='0'></iframe>"))
+          
+           
   ),
 
   conditionalPanel("false", icon("crosshair"))
