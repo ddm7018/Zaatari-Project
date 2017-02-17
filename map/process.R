@@ -60,6 +60,7 @@ colnames(blockSumTable)[5] <- "literacy"
 mergeTable                 <- merge(x=blockSumTable, y = data, keyby=list("district","block"), all = TRUE)
 cleanFinal                 <- mergeTable[!is.na(mergeTable['total_residents']),]
 
+saveRDS(assetTable,"cap_data/raw_assets.rds")
 saveRDS(cleanFinal,"cap_data/block_summary.rds")
 
 
