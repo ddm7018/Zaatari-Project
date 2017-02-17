@@ -71,10 +71,10 @@ function(input, output, session) {
     # print(colHash[[colorBy]])
     colorData <- block[[colHash[[colorBy]]]]
     if (colorBy == 'avg_info_source'){
-    pal       <- colorBin("Spectral", colorData, 7)
+    pal       <- colorBin("Blues", colorData, 7)
     }
     else{
-      pal       <- colorQuantile("Spectral", colorData, 7)
+      pal       <- colorQuantile("Blues", colorData, 7)
     }
     radius    <- block[[colHash[[sizeBy]]]]
     
