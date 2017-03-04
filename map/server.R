@@ -4,6 +4,7 @@ library(scales)
 library(lattice)
 library(dplyr)
 library(hash)
+source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 # set.seed(100)
@@ -16,59 +17,49 @@ library(hash)
 function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
+  
+  
   output$map <- renderLeaflet({
-      leaflet( ) %>%
+    leaflet( ) %>%
       addTiles() %>%
       setView(lng = 36.345 , lat = 32.29 , zoom = 14)
+      
   })
   
-  # A reactive expression that returns the set of zips that are
-  # in bounds right now
-  # zipsInBounds <- reactive({
-  #   if (is.null(input$map_bounds))
-  #     return(zipdata[FALSE,])
-  #   bounds <- input$map_bounds
-  #   latRng <- range(bounds$north, bounds$south)
-  #   lngRng <- range(bounds$east, bounds$west)
-  #   
-  #   subset(zipdata,
-  #          latitude >= latRng[1] & latitude <= latRng[2] &
-  #            longitude >= lngRng[1] & longitude <= lngRng[2])
-  # })
+  output$contents <- renderTable({
+
+    
+    inFile <- input$file1
+    
+    if (is.null(inFile))
+      return(NULL)
+    dataFile <- read.csv(inFile$datapath)
+    update(dataFile)
+    block <- NULL
+  })
   
-  # # Precalculate the breaks we'll need for the two histograms
-  # centileBreaks <- hist(plot = FALSE, allzips$centile, breaks = 20)$breaks
-  # 
-  # output$histCentile <- renderPlot({
-  #   # If no zipcodes are in view, don't plot
-  #   if (nrow(zipsInBounds()) == 0)
-  #     return(NULL)
-  #   
-  #   hist(zipsInBounds()$centile,
-  #        breaks = centileBreaks,
-  #        main = "SuperZIP score (visible zips)",
-  #        xlab = "Percentile",
-  #        xlim = range(allzips$centile),
-  #        col = '#00DD00',
-  #        border = 'white')
-  # })
-  # 
-  # output$scatterCollegeIncome <- renderPlot({
-  #   # If no zipcodes are in view, don't plot
-  #   if (nrow(zipsInBounds()) == 0)
-  #     return(NULL)
-  #   
-  #   print(xyplot(income ~ college, data = zipsInBounds(), xlim = range(allzips$college), ylim = range(allzips$income)))
-  # })
+  output$hist <- renderPlot(
+    hist(block[[colHash[[input$color]]]], 
+         main = "Histogram",
+         xlab = input$color
+         ))
+  
+  output$scatter <- renderPlot(
+    xyplot(eval(parse(text=colHash[[input$color]])) ~eval(parse(text=colHash[[input$size]])), 
+           block)
+        )
+
   
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
+
+
   observe({
+    print("Here")
+    block     <- readRDS("cap_data/block_summary.rds")
     colorBy   <- input$color
     sizeBy    <- input$size
-    # print(colorBy)
-    # print(sizeBy)
-    # print(colHash[[colorBy]])
+
     colorData <- block[[colHash[[colorBy]]]]
     if (colorBy == 'avg_info_source'){
     pal       <- colorBin("Blues", colorData, 7)
@@ -78,22 +69,7 @@ function(input, output, session) {
     }
     radius    <- block[[colHash[[sizeBy]]]]
     
-    # if(colorBy == "totalEdupeople"){
-    #   colorData <- block[["V2"]]
-    #   pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
-    # }
-    # else{
-    #   colorData <- block[["V1"]]
-    #   pal       <- colorBin("Spectral", colorData, 7, pretty = TRUE)
-    # }
-    # 
-    # if(sizeBy == "totalpeople"){
-    #   radius <- block[["V1"]]
-    # }
-    # else{
-    #   radius <- block[["V2"]]
-    # }
-    # 
+
     leafletProxy("map", data = block) %>%
       clearShapes() %>%
       addCircles(~long, ~lat, radius = radius,
