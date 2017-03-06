@@ -4,6 +4,9 @@ library(XML)
 
 source("core.R")
 
+file.remove("cap_data/raw_assets.rds")
+file.remove("cap_data/block_summary.rds")
+
 
 #read in asset csv files, assign district column based on relevant district
 #join the tables together

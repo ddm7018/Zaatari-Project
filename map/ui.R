@@ -9,9 +9,8 @@ vars <- c(
 )
 
 navbarPage("Zaatari", id="nav",
-
   tabPanel("Interactive map",
-    div(class="outer",
+      div(class="outer",
       tags$head(
         # Include our custom CSS
         includeCSS("styles.css"),
@@ -55,7 +54,8 @@ navbarPage("Zaatari", id="nav",
                         accept=c('text/csv',
                                  'text/comma-separated-values,
                                  text/plain','.csv')),
-              tags$hr()
+              tags$hr(),
+              actionButton("recalc", "Add Data")
               #checkboxInput('header', 'Header', TRUE),
               #radioButtons('sep', 'Separator',
               #             c(Comma=',',

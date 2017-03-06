@@ -10,6 +10,7 @@ update <- function(data){
   
   #ETL rule (hardcoded for now)
   data$information.age_informant <- as.character(data$information.age_informant)
+  data$information.age_informant2 <- as.character(data$information.age_informant2)
   data$information.age_informant[data$information.age_informant == "15_24"] <- "20"
   data$information.age_informant[data$information.age_informant == "25_44"] <- "34"
   data$information.age_informant[data$information.age_informant == "45_64"] <- "55"

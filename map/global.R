@@ -2,7 +2,7 @@ library(dplyr)
 library(hash)
 
 asset <- readRDS("cap_data/raw_assets.rds")
-block <- readRDS("cap_data/block_summary.rds")
+#block <- readRDS("cap_data/block_summary.rds")
 
 colHash <- hash()
 colHash["total_educated"] <- "total_educated"

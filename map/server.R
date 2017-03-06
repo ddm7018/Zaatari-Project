@@ -18,6 +18,12 @@ function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
   
+  block <- eventReactive(input$recalc, {
+    readRDS("cap_data/block_summary.RDS")}, ignoreNULL = FALSE)  
+  
+  observeEvent(input$recalc, {
+    print("recalculating ")
+  })
   
   output$map <- renderLeaflet({
     leaflet( ) %>%
@@ -28,25 +34,24 @@ function(input, output, session) {
   
   output$contents <- renderTable({
 
-    
     inFile <- input$file1
     
     if (is.null(inFile))
       return(NULL)
     dataFile <- read.csv(inFile$datapath)
     update(dataFile)
-    block <- NULL
+    
   })
   
   output$hist <- renderPlot(
-    hist(block[[colHash[[input$color]]]], 
+    hist(block()[[colHash[[input$color]]]], 
          main = "Histogram",
          xlab = input$color
          ))
   
   output$scatter <- renderPlot(
     xyplot(eval(parse(text=colHash[[input$color]])) ~eval(parse(text=colHash[[input$size]])), 
-           block)
+           block())
         )
 
   
@@ -55,22 +60,20 @@ function(input, output, session) {
 
 
   observe({
-    print("Here")
-    block     <- readRDS("cap_data/block_summary.rds")
     colorBy   <- input$color
     sizeBy    <- input$size
 
-    colorData <- block[[colHash[[colorBy]]]]
+    colorData <- block()[[colHash[[colorBy]]]]
     if (colorBy == 'avg_info_source'){
     pal       <- colorBin("Blues", colorData, 7)
     }
     else{
       pal       <- colorQuantile("Blues", colorData, 7)
     }
-    radius    <- block[[colHash[[sizeBy]]]]
+    radius    <- block()[[colHash[[sizeBy]]]]
     
 
-    leafletProxy("map", data = block) %>%
+    leafletProxy("map", data = block()) %>%
       clearShapes() %>%
       addCircles(~long, ~lat, radius = radius,
                  stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
