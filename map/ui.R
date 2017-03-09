@@ -1,5 +1,5 @@
 library(leaflet)
-
+library(rgdal)
 # Choices for drop-downs
 vars <- c(
   "Total Household Residents" = "total_residents",
