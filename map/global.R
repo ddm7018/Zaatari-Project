@@ -3,7 +3,7 @@ library(hash)
 library(rgdal)
 
 asset <- readRDS("cap_data/raw_assets.rds")
-#block <- readRDS("cap_data/block_summary.rds")
+block <- readRDS("cap_data/block_summary.rds")
 
 dist <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
 dist <- spTransform(dist, CRS("+proj=longlat +datum=WGS84"))
