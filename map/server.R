@@ -127,9 +127,9 @@ function(input, output, session) {
     leafletProxy("map", data = dist) %>%
       addPolygons(color = "#444444", weight = dist[[colHash[[sizeBy]]]] * .025, smoothFactor = 1.0,
                   opacity = 1.0, fillOpacity = .8,
-                  fillColor=pal(colorData),
-                 highlightOptions = highlightOptions(color = "white",
-                                                       bringToFront = TRUE)
+                  fillColor=pal(colorData)
+                 #highlightOptions = highlightOptions(color = "white",
+                #                                       bringToFront = TRUE)
                  )
   })
     
