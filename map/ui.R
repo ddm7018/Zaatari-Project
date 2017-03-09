@@ -28,9 +28,8 @@ navbarPage("Zaatari", id="nav",
         conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
           # Only prompt for threshold when coloring or sizing by superzip
           numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
-        ),
-        plotOutput("hist", height = 200),
-        plotOutput("scatter", height = 250)
+        )
+       
       ),
       tags$div(id="cite",
         'Daniel Mooney - RIT IST Capstone'
@@ -45,6 +44,30 @@ navbarPage("Zaatari", id="nav",
     hr(),
     DT::dataTableOutput("sumTable")
   ),
+  tabPanel("Charts",
+           plotOutput("hist", height = 200),
+           plotOutput("scatter", height = 250),
+           absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
+                         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
+                         width = 330, height = "auto",
+                         h2("Explorer"),
+                         selectInput("hist_input", "Histogram", vars, selected = "total_residents"),
+                         selectInput("x_input", "X Input", vars, selected = "total_educated"),
+                         selectInput("y_input", "Y Input", vars, selected = "total_educated")
+                         )
+                         
+           
+  ),
+  tabPanel("Console",
+  tags$iframe(width='100%', height= '500',
+              src='http://www.r-fiddle.org/#/fiddle?id=QMGrgLW9&version=1',
+              allowfullscreen='allowfullscreen', frameborder='0')),  
+  
+  tabPanel("Function Builder",
+  selectInput("attr", "Choose an attribute:",names(asset)),
+  selectInput("func", "Choose an function:",c("sum","mean","count")),
+  DT::dataTableOutput("functionbuilder"),
+  actionButton("addfunc", "Add Function")),
   
  tabPanel("Upload",
           titlePanel("Uploading Files"),

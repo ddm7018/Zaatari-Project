@@ -4,6 +4,9 @@ library(scales)
 library(lattice)
 library(dplyr)
 library(hash)
+library(rgdal)
+
+
 source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
@@ -25,6 +28,19 @@ function(input, output, session) {
     print("recalculating ")
   })
   
+  block2 <- eventReactive(input$addfunc, { update1() }, ignoreNULL = FALSE)  
+  
+  observeEvent(input$addfunc, {
+    print("adding the new function")
+    addFunction(input$attr, input$func)
+  })
+  
+  addFunction <- function(x ,y){
+    print(paste(x,y))
+    #add to list
+  }
+  
+  
   output$map <- renderLeaflet({
     leaflet( ) %>%
       addTiles() %>%
@@ -32,7 +48,29 @@ function(input, output, session) {
       
   })
   
-  output$contents <- renderTable({
+  output$functionbuilder <- DT::renderDataTable({
+    #paste("You chose", input$attr, input$func)
+    
+    inputText <- paste(input$func,"(",input$attr,")",sep="")    
+    #inputText <- "sum(household.household_member)"
+    result = tryCatch({
+      blockSumTable <- data.frame(asset[, list(eval(parse(text = inputText))),
+                                        by = list(district,collector.block_number)])
+    }, warning = function(w) {
+      "warning"
+    }, error = function(e) {
+      "error"
+    }, finally = {
+    })
+    
+    result1 <- data.table(result)
+    df <- result1 %>% mutate()
+    action <- DT::dataTableAjax(session, df)
+    DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
+  })
+  
+  
+  output$contents <- DT::renderDataTable({
 
     inFile <- input$file1
     
@@ -44,14 +82,16 @@ function(input, output, session) {
   })
   
   output$hist <- renderPlot(
-    hist(block()[[colHash[[input$color]]]], 
+    hist(block()[[colHash[[input$hist_input]]]], 
          main = "Histogram",
-         xlab = input$color
+         xlab = input$hist_input
          ))
   
   output$scatter <- renderPlot(
-    xyplot(eval(parse(text=colHash[[input$color]])) ~eval(parse(text=colHash[[input$size]])), 
-           block())
+    xyplot(eval(parse(text=colHash[[input$x_input]])) ~eval(parse(text=colHash[[input$y_input]])), 
+           block(),
+           xlab = input$x_input,
+           ylab = input$y_input)
         )
 
   
@@ -63,32 +103,52 @@ function(input, output, session) {
     colorBy   <- input$color
     sizeBy    <- input$size
 
-    colorData <- block()[[colHash[[colorBy]]]]
-    if (colorBy == 'avg_info_source'){
+    colorData <- dist[[colHash[[colorBy]]]]
     pal       <- colorBin("Blues", colorData, 7)
-    }
-    else{
-      pal       <- colorQuantile("Blues", colorData, 7)
-    }
-    radius    <- block()[[colHash[[sizeBy]]]]
+    
+    print(sizeBy)
+    #print(colorData)
+    #if (colorBy == 'avg_info_source'){
+    #pal       <- colorBin("Blues", colorData, 7)
+    #}
+    #else{
+    #  pal       <- colorBin("Blues", colorData, 7)
+    #}
+    #radius    <- block()[[colHash[[sizeBy]]]]
     
 
-    leafletProxy("map", data = block()) %>%
-      clearShapes() %>%
-      addCircles(~long, ~lat, radius = radius,
-                 stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
-      addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
-                layerId="colorLegend")
+  #   leafletProxy("map", data = block()) %>%
+  #     clearShapes() %>%
+  #     addCircles(~long, ~lat, radius = radius,
+  #                stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
+  #     addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
+  #               layerId="colorLegend")
+  # 
+    leafletProxy("map", data = dist) %>%
+      addPolygons(color = "#444444", weight = dist[[colHash[[sizeBy]]]] * .025, smoothFactor = 1.0,
+                  opacity = 1.0, fillOpacity = .8,
+                  fillColor=pal(colorData),
+                 highlightOptions = highlightOptions(color = "white",
+                                                       bringToFront = TRUE)
+                 )
   })
-  
+    
   # # Show a popup at the given location
   showBlockPopup <- function(block1, lat, lng) {
+
+    
      lat <- round(lat,5)  
      lng <- round(lng,5)
-     findDistrict <- block[(round(block$long,5)==lng & round(block$lat,5)==lat ),]
+     print(lat)
+     print(lng)
+     for (i in 1:nrow(data.frame(dist))){
+       if (lng > dist[i,]@bbox[1] & lng < dist[i,]@bbox[3] & lat > dist[i,]@bbox[2] & lat < dist[i,]@bbox[4]){
+         findDistrict <- dist[i,]
+       }
+     }
      #print(findDistrict)
      content <- as.character(tagList(
-     tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
+     tags$h4("District",findDistrict$District,"- Block",findDistrict$Block), 
      tags$h4("Total Residents: ",findDistrict$total_residents),
      tags$h4("Total Educated Residents: ",findDistrict$total_educated),
      tags$h4("Literacy Rate: ",round(findDistrict$literacy,2)),
@@ -96,7 +156,7 @@ function(input, output, session) {
      
      
      ))
-     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = block)
+     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = dist)
    }
 
    # When map is clicked, show a popup with city info
@@ -115,7 +175,7 @@ function(input, output, session) {
   ## Data Explorer ###########################################
   
    output$sumTable <- DT::renderDataTable({
-     df <- block %>% mutate()
+     df <- block() %>% mutate()
      action <- DT::dataTableAjax(session, df)
      DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
    })
