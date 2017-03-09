@@ -22,7 +22,7 @@ function(input, output, session) {
   # Create the map
   
   block <- eventReactive(input$recalc, {
-    readRDS("cap_data/block_summary.RDS")}, ignoreNULL = FALSE)  
+    readRDS("cap_data/block_summary.rds")}, ignoreNULL = FALSE)  
   
   observeEvent(input$recalc, {
     print("recalculating ")
@@ -68,7 +68,7 @@ function(input, output, session) {
     action <- DT::dataTableAjax(session, df)
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
-  
+
   
   output$contents <- DT::renderDataTable({
 
