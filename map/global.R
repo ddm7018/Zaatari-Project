@@ -1,5 +1,6 @@
 library(dplyr)
 library(hash)
+library(rgdal)
 
 asset <- readRDS("cap_data/raw_assets.rds")
 #block <- readRDS("cap_data/block_summary.rds")
