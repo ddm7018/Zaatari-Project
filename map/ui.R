@@ -1,12 +1,14 @@
 library(leaflet)
 library(rgdal)
 # Choices for drop-downs
-vars <- c(
-  "Total Household Residents" = "total_residents",
-  "Total Educated Residents" = "total_educated",
-  "Percentage Education" = "literacy",
-  "Average Information Source" = "avg_info_source"
-)
+
+
+#move to core
+dimFile <- read.table("dim.txt")
+vars = c()
+for(i in 1:nrow(dimFile)){
+    vars[[as.character(dimFile['V2'][i,])]] <- as.character(dimFile['V2'][i,])
+}
 
 navbarPage("Zaatari", id="nav",
   tabPanel("Interactive map",
@@ -23,8 +25,8 @@ navbarPage("Zaatari", id="nav",
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
         h2("Explorer"),
-        selectInput("color", "Color", vars, selected = "total_residents"),
-        selectInput("size", "Size", vars, selected = "total_educated"),
+        selectInput("color", "Color", vars, selected = "sum_household"),
+        selectInput("size", "Size", vars, selected = "literate"),
         conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
           # Only prompt for threshold when coloring or sizing by superzip
           numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
@@ -51,9 +53,9 @@ navbarPage("Zaatari", id="nav",
                          draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
                          width = 330, height = "auto",
                          h2("Explorer"),
-                         selectInput("hist_input", "Histogram", vars, selected = "total_residents"),
-                         selectInput("x_input", "X Input", vars, selected = "total_educated"),
-                         selectInput("y_input", "Y Input", vars, selected = "total_educated")
+                         selectInput("hist_input", "Histogram", vars, selected = "literate"),
+                         selectInput("x_input", "X Input", vars, selected = "literate"),
+                         selectInput("y_input", "Y Input", vars, selected = "literate")
                          )
                          
            

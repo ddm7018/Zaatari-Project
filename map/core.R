@@ -36,23 +36,38 @@ getDisData <- function(){
   return(data)
 }
 
+
+
+
 sumDataAndSave <- function(joinTable){
   #summing at the block level from the asset data and the combining with a coordinates for a final complete 
   assetTable                 <- data.table(joinTable)
-  blockSumTable              <- data.frame(assetTable[, list(sum(as.numeric(education_skills.literate)),
-                                                             eval(parse(text = 'sum(household.household_member)')),
-                                                             sum(as.numeric(education_skills.literate))/sum(household.household_member)*100,
-                                                             mean(as.numeric(information.age_informant))),
+  l<-c()
+  dimFile <- read.table("dim.txt")
+  for(i in 1:nrow(dimFile['V1'])) {
+    b <- as.character(dimFile['V1'][i,])
+    l<-c(l,b)
+    i=i+1
+  }
+
+  blockSumTable              <- data.frame(assetTable[, list(
+                                                             eval(parse(text =l[1])),
+                                                             eval(parse(text =l[2])),
+                                                             eval(parse(text =l[3])),
+                                                             eval(parse(text =l[4])),
+                                                             eval(parse(text =l[5])),
+                                                             eval(parse(text =l[6]))),
                                                       by = list(district,collector.block_number)])
+
   colnames(blockSumTable)[2] <- "block"
-  colnames(blockSumTable)[3] <- "total_educated"
-  colnames(blockSumTable)[4] <- "total_residents"
-  colnames(blockSumTable)[5] <- "literacy"
-  colnames(blockSumTable)[6] <- "avg_info_source"
   
+  for(i in 1:nrow(dimFile)){
+    colnames(blockSumTable)[i + 2] <- as.character(dimFile['V2'][i,])
+  }
+  print(blockSumTable)
   
   mergeTable                 <- merge(x=blockSumTable, y = getDisData(), keyby=list("district","block"), all = TRUE)
-  cleanFinal                 <- mergeTable[!is.na(mergeTable['total_residents']),]
+  cleanFinal                 <- mergeTable[!is.na(mergeTable['sum_household']),]
   
   saveRDS(assetTable,"cap_data/raw_assets.rds")
   saveRDS(cleanFinal,"cap_data/block_summary.rds")

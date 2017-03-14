@@ -10,12 +10,7 @@ library(rgdal)
 source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
-# set.seed(100)
-# zipdata <- allzips[sample.int(nrow(allzips), 10000),]
-# By ordering by centile, we ensure that the (comparatively rare) SuperZIPs
-# will be drawn last and thus be easier to see
-# zipdata <- zipdata[order(zipdata$centile),]
-# addMarkers(lat = ~lat,lng= ~long,popup = paste(block$district,"-",block$block)) %>%
+set.seed(100)
 
 function(input, output, session) {
   ## Interactive Map ###########################################
@@ -49,10 +44,8 @@ function(input, output, session) {
   })
   
   output$functionbuilder <- DT::renderDataTable({
-    #paste("You chose", input$attr, input$func)
-    
     inputText <- paste(input$func,"(",input$attr,")",sep="")    
-    #inputText <- "sum(household.household_member)"
+    print(inputText)
     result = tryCatch({
       blockSumTable <- data.frame(asset[, list(eval(parse(text = inputText))),
                                         by = list(district,collector.block_number)])
@@ -73,7 +66,6 @@ function(input, output, session) {
   output$contents <- DT::renderDataTable({
 
     inFile <- input$file1
-    
     if (is.null(inFile))
       return(NULL)
     dataFile <- read.csv(inFile$datapath)
@@ -97,25 +89,26 @@ function(input, output, session) {
   
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
-
-
   observe({
     colorBy   <- input$color
     sizeBy    <- input$size
-
+    print(sizeBy)
+    print(colorBy)
     colorData <- dist[[colHash[[colorBy]]]]
     pal       <- colorBin("Blues", colorData, 7)
     
-    print(sizeBy)
-    #print(colorData)
-    #if (colorBy == 'avg_info_source'){
-    #pal       <- colorBin("Blues", colorData, 7)
-    #}
-    #else{
-    #  pal       <- colorBin("Blues", colorData, 7)
-    #}
-    #radius    <- block()[[colHash[[sizeBy]]]]
-    
+    noData <- function(ele){
+      l = c()
+      for(i in 1:length(ele)){
+        if(ele[i] > 0){
+          l = c(l,1)
+        }
+        else{
+          l = c(l,0)
+        }
+      }
+        return(l)
+      }  
 
   #   leafletProxy("map", data = block()) %>%
   #     clearShapes() %>%
@@ -125,8 +118,8 @@ function(input, output, session) {
   #               layerId="colorLegend")
   # 
     leafletProxy("map", data = dist) %>%
-      addPolygons(color = "#444444", weight = dist[[colHash[[sizeBy]]]] * .025, smoothFactor = 1.0,
-                  opacity = 1.0, fillOpacity = .8,
+      addPolygons(color = "#444444", weight = dist[[colHash[[sizeBy]]]] * .1, smoothFactor = 1.0,
+                  opacity = 1, fillOpacity = noData(colorData),
                   fillColor=pal(colorData)
                  #highlightOptions = highlightOptions(color = "white",
                 #                                       bringToFront = TRUE)
@@ -149,10 +142,10 @@ function(input, output, session) {
      #print(findDistrict)
      content <- as.character(tagList(
      tags$h4("District",findDistrict$District,"- Block",findDistrict$Block), 
-     tags$h4("Total Residents: ",findDistrict$total_residents),
-     tags$h4("Total Educated Residents: ",findDistrict$total_educated),
-     tags$h4("Literacy Rate: ",round(findDistrict$literacy,2)),
-     tags$h4("Average Information Source Age: ",findDistrict$avg_info_source)
+     tags$h4("Total Residents: ",findDistrict$sum_household)
+     #tags$h4("Total Educated Residents: ",findDistrict$total_educated),
+     #tags$h4("Literacy Rate: ",round(findDistrict$literacy,2)),
+     #tags$h4("Average Information Source Age: ",findDistrict$avg_info_source)
      
      
      ))
