@@ -33,22 +33,24 @@ colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upp
   }
 
 
-bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=10){
+bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   quanmean<-rasterx
   quanmean[quanmean ==0] <- NA
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
+  print(brks)
   r1 <- within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))
   quantr<-data.frame(r1[,2]) 
   quanvar<-rastery
   quanvar[quanvar ==0] <- NA
   temp <- data.frame(quanvar, quantile=rep(NA, length(quanvar)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
+  print(brks)
   r2 <- within(temp, quantile <- cut(quanvar, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))
   quantr2<-data.frame(r2[,2])
   as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
   col.matrix2<-colormatrix
-  cn<-unique(colormatrix)
+  cn<-unique(col.matrix2)
   for(i in 1:length(col.matrix2)){
     ifelse(is.na(col.matrix2[i]),col.matrix2[i]<-1,col.matrix2[i]<-which(col.matrix2[i]==cn)[1])}
   cols<-numeric(length(quantr[,1]))
@@ -56,8 +58,8 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=10)
     a<-as.numeric.factor(quantr[i,1])
     b<-as.numeric.factor(quantr2[i,1])
     cols[i]<-as.numeric(col.matrix2[b,a])}
-  r<-rasterx
   r[1:length(r)]<-cols
+  print(r[166])
   return(r)}
 
 
@@ -174,10 +176,13 @@ function(input, output, session) {
     col.matrix <- colmat(nquantiles=4)
     x <- bivariate.map(dist[[colHash[[colorBy]]]],dist[[colHash[[sizeBy]]]], colormatrix=col.matrix, nquantiles=4)
     
+    print(unique(col.matrix))
+    print(unique(col.matrix)[x])
+    
     leafletProxy("map", data = dist) %>%
       addPolygons(color = "#444444", weight = 0, smoothFactor = 1.0,
                   opacity = 1, fillOpacity = noData(colorData),
-                  fillColor=col.matrix[x]
+                  fillColor=unique(col.matrix)[x]
                  #highlightOptions = highlightOptions(color = "white",
                 #                                       bringToFront = TRUE)
                  )
@@ -199,12 +204,10 @@ function(input, output, session) {
      #print(findDistrict)
      content <- as.character(tagList(
      tags$h4("District",findDistrict$District,"- Block",findDistrict$Block), 
-     tags$h4("Total Residents: ",findDistrict$sum_household)
-     #tags$h4("Total Educated Residents: ",findDistrict$total_educated),
-     #tags$h4("Literacy Rate: ",round(findDistrict$literacy,2)),
-     #tags$h4("Average Information Source Age: ",findDistrict$avg_info_source)
-     
-     
+     tags$h4("Total Residents: ",findDistrict$sum_household),
+     tags$h4("Total Educated Residents: ",findDistrict$literate),
+     tags$h4("Literacy Rate: ",findDistrict$literacy_rate),
+     tags$h4("Average Information Source Age: ",findDistrict$average_informat)
      ))
      leafletProxy("map") %>% addPopups(lng, lat, content, layerId = dist)
    }
