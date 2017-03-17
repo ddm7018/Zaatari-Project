@@ -25,9 +25,9 @@ navbarPage("Zaatari", id="nav",
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
         h2("Explorer"),
-        selectInput("color", "Color", vars, selected = "sum_household"),
-        selectInput("size", "Size", vars, selected = "literate"),
-        plotOutput("test")
+        selectInput("x_color", "X Color", vars, selected = "sum_household"),
+        selectInput("y_color", "Y Color", vars, selected = "literate"),
+        plotOutput("legend_color")
        
       ),
       tags$div(id="cite",

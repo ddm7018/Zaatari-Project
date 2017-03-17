@@ -6,7 +6,7 @@ asset <- readRDS("cap_data/raw_assets.rds")
 block <- readRDS("cap_data/block_summary.rds")
 
 dist <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
-dist <- spTransform(dist, CRS("+proj=longlat +datum=WGS84"))
+dist <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 #move to core.R
 dimFile <- read.table("dim.txt")

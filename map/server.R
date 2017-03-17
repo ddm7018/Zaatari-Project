@@ -25,7 +25,9 @@ colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upp
   plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
   for(i in 1:101){
     col.temp<-col.matrix[i-1,]
-    points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex=1)
+    print(i)
+    points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
+
     }
   seqs<-seq(0,100,(100/nquantiles))
   seqs[1]<-1
@@ -87,8 +89,8 @@ function(input, output, session) {
     #add to list
   }
   
-  output$test <- renderPlot({
-    col.matrix <- colmat(nquantiles=4, xlab = input$color, ylab = input$size)
+  output$legend_color <- renderPlot({
+    col.matrix <- colmat(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
   })
   
   
@@ -146,14 +148,13 @@ function(input, output, session) {
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
-    colorBy   <- input$color
-    sizeBy    <- input$size
-    print(sizeBy)
-    print(colorBy)
-    colorData <- dist[[colHash[[colorBy]]]]
+    x_color_by   <- input$x_color
+    y_color_by    <- input$y_color
+    colorData <- dist[[colHash[[x_color_by]]]]
     pal       <- colorBin("Blues", colorData, 7)
     
     noData <- function(ele){
+      ele[is.na(ele)] <- 0
       l = c()
       for(i in 1:length(ele)){
         if(ele[i] > 0){
@@ -163,7 +164,8 @@ function(input, output, session) {
           l = c(l,0)
         }
       }
-        return(l)
+      print(l)  
+      return(l)
       }  
 
   #   leafletProxy("map", data = block()) %>%
@@ -174,17 +176,19 @@ function(input, output, session) {
   #               layerId="colorLegend")
   # 
     col.matrix <- colmat(nquantiles=4)
-    x <- bivariate.map(dist[[colHash[[colorBy]]]],dist[[colHash[[sizeBy]]]], colormatrix=col.matrix, nquantiles=4)
+    x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4)
     
     print(unique(col.matrix))
+    print("1")
     print(unique(col.matrix)[x])
-    
+    print("2")
     leafletProxy("map", data = dist) %>%
-      addPolygons(color = "#444444", weight = 0, smoothFactor = 1.0,
+      addPolygons(color = "#444444", weight = 0.01, smoothFactor = 1.0,
                   opacity = 1, fillOpacity = noData(colorData),
-                  fillColor=unique(col.matrix)[x]
-                 #highlightOptions = highlightOptions(color = "white",
-                #                                       bringToFront = TRUE)
+                  fillColor=unique(col.matrix)[x],
+                  highlightOptions = highlightOptions(weight = 1,
+                                                      color = "white",
+                                                       bringToFront = TRUE)
                  )
   })
     
@@ -194,14 +198,13 @@ function(input, output, session) {
     
      lat <- round(lat,5)  
      lng <- round(lng,5)
-     print(lat)
-     print(lng)
-     for (i in 1:nrow(data.frame(dist))){
-       if (lng > dist[i,]@bbox[1] & lng < dist[i,]@bbox[3] & lat > dist[i,]@bbox[2] & lat < dist[i,]@bbox[4]){
-         findDistrict <- dist[i,]
-       }
-     }
-     #print(findDistrict)
+     coords <- as.data.frame(cbind(lng, lat))
+     point <- SpatialPoints(coords)
+     proj4string(point) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+     findDistrict <- dist[point,]
+     print(findDistrict)
+     
+     print(count)
      content <- as.character(tagList(
      tags$h4("District",findDistrict$District,"- Block",findDistrict$Block), 
      tags$h4("Total Residents: ",findDistrict$sum_household),
