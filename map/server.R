@@ -22,10 +22,10 @@ colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upp
   for(i in 1:101){
     my.col<-c(paste(my.pal.1[i]),paste(my.pal.2[i]))
     col.matrix[102-i,]<-findColours(my.class,my.col)}
-  plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
+  #plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
   for(i in 1:101){
     col.temp<-col.matrix[i-1,]
-    points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
+    #points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
     }
   seqs<-seq(0,100,(100/nquantiles))
   seqs[1]<-1
