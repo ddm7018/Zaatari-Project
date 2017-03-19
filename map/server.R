@@ -175,10 +175,10 @@ function(input, output, session) {
     leafletProxy("map", data = dist) %>%
       addPolygons(color = "#444444", weight = 0.01, smoothFactor = 1.0,
                   opacity = 1, fillOpacity = noData(colorData),
-                  fillColor=unique(col.matrix)[x],
-                  highlightOptions = highlightOptions(weight = 1,
-                                                      color = "white",
-                                                      bringToFront = TRUE)
+                  fillColor=unique(col.matrix)[x]
+                  #highlightOptions = highlightOptions(weight = 1,
+                  #                                    color = "white",
+                  #                                    bringToFront = TRUE)
       )
   })
   
