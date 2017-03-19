@@ -11,6 +11,25 @@ source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
+colmat.print<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
+  my.data<-seq(0,1,.01)
+  my.class<-classIntervals(my.data,n=nquantiles,style="quantile")
+  my.pal.1<-findColours(my.class,c(upperleft,bottomleft))
+  my.pal.2<-findColours(my.class,c(upperright, bottomright))
+  col.matrix<-matrix(nrow = 101, ncol = 101, NA)
+  for(i in 1:101){
+    my.col<-c(paste(my.pal.1[i]),paste(my.pal.2[i]))
+    col.matrix[102-i,]<-findColours(my.class,my.col)}
+  plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
+  for(i in 1:101){
+    col.temp<-col.matrix[i-1,]
+    points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
+  }
+  seqs<-seq(0,100,(100/nquantiles))
+  seqs[1]<-1
+  col.matrix <- col.matrix[c(seqs), c(seqs)]
+}
+
 
 
 colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
@@ -88,7 +107,7 @@ function(input, output, session) {
   }
   
   output$legend_color <- renderPlot({
-    col.matrix <- colmat(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
+    col.matrix <- colmat.print(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
   })
   
   
