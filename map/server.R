@@ -5,7 +5,7 @@ library(lattice)
 library(dplyr)
 library(hash)
 library(rgdal)
-
+library(classInt)
 
 source("update.R")
 
