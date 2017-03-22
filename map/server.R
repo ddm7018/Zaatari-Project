@@ -6,7 +6,7 @@ library(dplyr)
 library(hash)
 library(rgdal)
 library(classInt)
-
+library(tidyr)
 source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
@@ -29,8 +29,6 @@ colmat.print<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255
   seqs[1]<-1
   col.matrix <- col.matrix[c(seqs), c(seqs)]
 }
-
-
 
 colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
   my.data<-seq(0,1,.01)
@@ -86,7 +84,11 @@ function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
   
-  
+  test <- c("check","check1")
+  observe({
+  updateSelectInput(session = session, inputId = "func", choices = test)
+  print(input$attr)
+    })
   block <- eventReactive(input$recalc, {
     readRDS("cap_data/block_summary.rds")}, ignoreNULL = FALSE)  
   
@@ -118,19 +120,42 @@ function(input, output, session) {
     
   })
   
+  typeFunc <- function(ele){
+
+    t <- eval(parse(text=paste0("levels(asset$",ele,")")))
+    if(typeof(t) == 'NULL'){
+      return("null")
+    }
+    else if(is.na(as.numeric(t[1]))){
+      return("non-numeric")
+    }
+    else{
+      return("numeric")
+    }
+  }
+  
+  
   output$functionbuilder <- DT::renderDataTable({
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     print(paste0("asset$",input$attr))
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
     print(levels1)
     
+    attrType <- typeFunc(input$attr)
+    if(attrType == "non-numeric"){
     tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
         group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr," == 'True'))")
+    }
+    else{
+      tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
+        group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr,"))")
+    }
     print(tableText)
     result = tryCatch({
       eval(parse(text = tableText))
     }, error = function(e) {
       e
+      
     })
   })
   

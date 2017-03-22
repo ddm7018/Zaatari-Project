@@ -64,7 +64,7 @@ navbarPage("Zaatari", id="nav",
   
   tabPanel("Function Builder",
   selectInput("attr", "Choose an attribute:",names(asset)),
-  selectInput("func", "Choose an function:",c("sum","mean","count")),
+  selectInput("func", "Choose an function:",choices = NULL),
   DT::dataTableOutput("functionbuilder"),
   actionButton("addfunc", "Add Function")),
   
