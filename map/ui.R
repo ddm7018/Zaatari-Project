@@ -4,11 +4,7 @@ library(rgdal)
 
 
 #move to core
-dimFile <- read.table("dim.txt")
-vars = c()
-for(i in 1:nrow(dimFile)){
-    vars[[as.character(dimFile['V2'][i,])]] <- as.character(dimFile['V2'][i,])
-}
+
 
 navbarPage("Zaatari", id="nav",
   tabPanel("Interactive map",
@@ -63,10 +59,12 @@ navbarPage("Zaatari", id="nav",
               allowfullscreen='allowfullscreen', frameborder='0')),  
   
   tabPanel("Function Builder",
-  selectInput("attr", "Choose an attribute:",names(asset)),
+  selectInput("attr", "Choose an attribute:",modifiedName),
   selectInput("func", "Choose an function:",choices = NULL),
   DT::dataTableOutput("functionbuilder"),
-  actionButton("addfunc", "Add Function")),
+  textInput("dim","","Dim1"),
+  actionButton("addDim", "Add Dimension")
+  ),
   
  tabPanel("Upload",
           titlePanel("Uploading Files"),
@@ -77,7 +75,7 @@ navbarPage("Zaatari", id="nav",
                                  'text/comma-separated-values,
                                  text/plain','.csv')),
               tags$hr(),
-              actionButton("recalc", "Add Data")
+              actionButton("evReactiveButton", "evReactiveButton")
               #checkboxInput('header', 'Header', TRUE),
               #radioButtons('sep', 'Separator',
               #             c(Comma=',',

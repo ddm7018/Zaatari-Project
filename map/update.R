@@ -27,3 +27,9 @@ update <- function(data){
   sumDataAndSave(newAssetData)
   
 }
+
+
+
+
+
+

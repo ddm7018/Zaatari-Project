@@ -11,6 +11,24 @@ source("update.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
+
+typeFunc <- function(ele){
+  
+  t <- eval(parse(text=paste0("levels(asset$",ele,")")))
+  if(typeof(t) == 'NULL'){
+    return("null")
+  }
+  else if(is.na(as.numeric(t[1]))){
+    return("non-numeric")
+  }
+  else{
+    return("numeric")
+  }
+}
+
+
+
+
 colmat.print<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
   my.data<-seq(0,1,.01)
   my.class<-classIntervals(my.data,n=nquantiles,style="quantile")
@@ -55,7 +73,6 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   quanmean[quanmean ==0] <- NA
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  #print(brks)
   r1 <- within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))
   quantr<-data.frame(r1[,2]) 
   quanvar<-rastery
@@ -84,30 +101,48 @@ function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
   
-  test <- c("check","check1")
-  observe({
-  updateSelectInput(session = session, inputId = "func", choices = test)
-  print(input$attr)
-    })
-  block <- eventReactive(input$recalc, {
-    readRDS("cap_data/block_summary.rds")}, ignoreNULL = FALSE)  
   
-  observeEvent(input$recalc, {
-    print("recalculating ")
-  })
+  evReact <- eventReactive(input$addDim, {"new val"})
   
-  block2 <- eventReactive(input$addfunc, { update1() }, ignoreNULL = FALSE)  
+  block <- eventReactive(input$addDim, {
+    readRDS("cap_data/block_summary.rds")}, ignoreNULL = FALSE)
   
-  observeEvent(input$addfunc, {
+  observeEvent(input$addDim, {
     print("adding the new function")
-    addFunction(input$attr, input$func)
-  })
+    print(input$dim)
+    print(tableTextGlobal)
+    tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
+    extracted <- tableTextGlobal[[1]][2]
+    print(extracted)
+    extracted <- substr(extracted,15,nchar(extracted)-1)
+    cat(extracted,input$dim,"\n",file="dim.txt",append=TRUE)
+    source("init.r")
+    source("global.r")
+    block()
+    vars[input$dim] <- input$dim
+    colHash[input$dim] <- input$dim
+    updateSelectInput(session = session,inputId = "x_color",choices = vars)
+    updateSelectInput(session = session,inputId = "y_color",choices = vars)
+    updateSelectInput(session = session,inputId = "hist_input",choices = vars)
+    updateSelectInput(session = session,inputId = "x_input",choices = vars)
+    updateSelectInput(session = session,inputId = "y_input",choices = vars)
+    })
   
-  addFunction <- function(x ,y){
-    print(paste(x,y))
-    #add to list
-  }
-  
+  observe({
+    choices <- eval(parse(text = paste0("levels(asset$",input$attr,")")))
+    if(typeFunc(input$attr) == "non-numeric"){
+      for(ele in choices){
+      choices <- c(choices,paste0("Percentage ",ele))
+      }
+    }
+    else{
+      choices <- c("sum", "mean","sd")
+    }
+    updateSelectInput(session = session, inputId = "func", choices = choices)
+    
+    })
+    
+    
   output$legend_color <- renderPlot({
     col.matrix <- colmat.print(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
   })
@@ -120,45 +155,34 @@ function(input, output, session) {
     
   })
   
-  typeFunc <- function(ele){
-
-    t <- eval(parse(text=paste0("levels(asset$",ele,")")))
-    if(typeof(t) == 'NULL'){
-      return("null")
-    }
-    else if(is.na(as.numeric(t[1]))){
-      return("non-numeric")
-    }
-    else{
-      return("numeric")
-    }
-  }
-  
-  
   output$functionbuilder <- DT::renderDataTable({
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
-    print(paste0("asset$",input$attr))
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
-    print(levels1)
-    
+
     attrType <- typeFunc(input$attr)
     if(attrType == "non-numeric"){
-    tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
-        group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr," == 'True'))")
+      if(startsWith(input$func,"Percentage") == TRUE){
+        newVal <- substr(input$func,12,nchar(input$func))
+        tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
+        group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr,"=='",newVal,"')/length(",input$attr,"))")
+    }
+      else{
+        tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
+        group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr,"=='",input$func,"'))")
+      }
     }
     else{
       tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
-        group_by( asset, district, collector.block_number) %>% summarize(true_count = sum(",input$attr,"))")
+        group_by( asset, district, collector.block_number) %>% summarize(true_count = ",input$func,"(as.numeric(",input$attr,")))")
     }
-    print(tableText)
+    assign("tableTextGlobal", tableText, envir = .GlobalEnv)
     result = tryCatch({
       eval(parse(text = tableText))
     }, error = function(e) {
       e
-      
     })
+    
   })
-  
   
   output$contents <- DT::renderDataTable({
     
@@ -261,7 +285,6 @@ function(input, output, session) {
   #
   
   ## Data Explorer ###########################################
-  
   output$sumTable <- DT::renderDataTable({
     df <- block() %>% mutate()
     action <- DT::dataTableAjax(session, df)
