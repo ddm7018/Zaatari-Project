@@ -13,7 +13,6 @@ navbarPage("Zaatari", id="nav",
           ),
             
         tags$head(
-        includeScript("js.cookie.js"),
         includeCSS("styles.css"),
         includeScript("gomap.js")
       ),
