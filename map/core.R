@@ -39,24 +39,33 @@ getDisData <- function(){
 
 
 
-sumDataAndSave <- function(joinTable){
+sumData <- function(joinTable,extraList = NULL){
   #summing at the block level from the asset data and the combining with a coordinates for a final complete 
   assetTable                 <- data.table(joinTable)
   l<-c()
   dimFile <- read.table("dim.txt")
+  for(ele in extraList){
+    eleSplit <- strsplit(ele, "---")
+    newFrame <- data.frame(V1 = eleSplit[[1]][2] ,V2 = eleSplit[[1]][1])
+    dimFile <- rbind(dimFile,newFrame)
+  }
+  
   for(i in 1:nrow(dimFile['V1'])) {
     b <- as.character(dimFile['V1'][i,])
     l<-c(l,b)
     i=i+1
   }
-
   blockSumTable              <- data.frame(assetTable[, list(
                                                              eval(parse(text =l[1])),
                                                              eval(parse(text =l[2])),
                                                              eval(parse(text =l[3])),
                                                              eval(parse(text =l[4])),
                                                              eval(parse(text =l[5])),
-                                                             eval(parse(text =l[6]))),
+                                                             eval(parse(text =l[6])),
+                                                             eval(parse(text =l[7])),
+                                                             eval(parse(text =l[8])),
+                                                             eval(parse(text =l[9])),
+                                                             eval(parse(text =l[10]))),
                                                       by = list(district,collector.block_number)])
 
   colnames(blockSumTable)[2] <- "block"
@@ -69,7 +78,7 @@ sumDataAndSave <- function(joinTable){
   mergeTable                 <- merge(x=blockSumTable, y = getDisData(), keyby=list("district","block"), all = TRUE)
   cleanFinal                 <- mergeTable[!is.na(mergeTable['sum_household']),]
   
-  saveRDS(assetTable,"cap_data/raw_assets.rds")
-  saveRDS(cleanFinal,"cap_data/block_summary.rds")
+  #saveRDS(assetTable,"cap_data/raw_assets.rds")
+  return(cleanFinal)
 }
 

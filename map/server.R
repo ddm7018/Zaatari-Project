@@ -7,13 +7,14 @@ library(hash)
 library(rgdal)
 library(classInt)
 library(tidyr)
-source("update.R")
+library(shinyStore)
+source("core.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
 
 typeFunc <- function(ele){
-  
+  print('insideTypeFun')
   t <- eval(parse(text=paste0("levels(asset$",ele,")")))
   if(typeof(t) == 'NULL'){
     return("null")
@@ -26,47 +27,43 @@ typeFunc <- function(ele){
   }
 }
 
-
-
-
-colmat.print<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
-  my.data<-seq(0,1,.01)
-  my.class<-classIntervals(my.data,n=nquantiles,style="quantile")
-  my.pal.1<-findColours(my.class,c(upperleft,bottomleft))
-  my.pal.2<-findColours(my.class,c(upperright, bottomright))
-  col.matrix<-matrix(nrow = 101, ncol = 101, NA)
+colmat.print <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorValue = 255), upperright = rgb(130,0,80, maxColorValue = 255), bottomleft="grey", bottomright = rgb(255,230,15, maxColorValue = 255), xlab = "x label", ylab = "y label"){
+  my.data    <- seq(0,1,.01)
+  my.class   <- classIntervals(my.data,n=nquantiles,style="quantile")
+  my.pal.1   <- findColours(my.class,c(upperleft,bottomleft))
+  my.pal.2   <- findColours(my.class,c(upperright, bottomright))
+  col.matrix <- matrix(nrow = 101, ncol = 101, NA)
   for(i in 1:101){
-    my.col<-c(paste(my.pal.1[i]),paste(my.pal.2[i]))
-    col.matrix[102-i,]<-findColours(my.class,my.col)}
-  plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
+    my.col <- c(paste(my.pal.1[i]),paste(my.pal.2[i]))
+    col.matrix[102-i,] <- findColours(my.class,my.col)}
+  plot(c(1,1),pch = 19,col = my.pal.1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xlab, ylab = ylab,cex.lab = 1.3)
   for(i in 1:101){
-    col.temp<-col.matrix[i-1,]
-    points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
+    col.temp <- col.matrix[i-1,]
+    points(my.data,rep((i-1)/100,101),pch=15,col = col.temp, cex = 1)
   }
-  seqs<-seq(0,100,(100/nquantiles))
-  seqs[1]<-1
+  seqs       <- seq(0,100,(100/nquantiles))
+  seqs[1]    <- 1
   col.matrix <- col.matrix[c(seqs), c(seqs)]
 }
 
-colmat<-function(nquantiles=10, upperleft=rgb(0,150,235, maxColorValue=255), upperright=rgb(130,0,80, maxColorValue=255), bottomleft="grey", bottomright=rgb(255,230,15, maxColorValue=255), xlab="x label", ylab="y label"){
-  my.data<-seq(0,1,.01)
-  my.class<-classIntervals(my.data,n=nquantiles,style="quantile")
-  my.pal.1<-findColours(my.class,c(upperleft,bottomleft))
-  my.pal.2<-findColours(my.class,c(upperright, bottomright))
-  col.matrix<-matrix(nrow = 101, ncol = 101, NA)
+colmat <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorValue = 255), upperright = rgb(130,0,80, maxColorValue = 255), bottomleft="grey", bottomright = rgb(255,230,15, maxColorValue = 255), xlab = "x label", ylab = "y label"){
+  my.data    <- seq(0,1,.01)
+  my.class   <- classIntervals(my.data,n=nquantiles,style="quantile")
+  my.pal.1   <- findColours(my.class,c(upperleft,bottomleft))
+  my.pal.2   <- findColours(my.class,c(upperright, bottomright))
+  col.matrix <- matrix(nrow = 101, ncol = 101, NA)
   for(i in 1:101){
-    my.col<-c(paste(my.pal.1[i]),paste(my.pal.2[i]))
-    col.matrix[102-i,]<-findColours(my.class,my.col)}
-  #plot(c(1,1),pch=19,col=my.pal.1, cex=0.5,xlim=c(0,1),ylim=c(0,1),frame.plot=F, xlab=xlab, ylab=ylab,cex.lab=1.3)
+    my.col <- c(paste(my.pal.1[i]),paste(my.pal.2[i]))
+    col.matrix[102-i,] <- findColours(my.class,my.col)}
+  #plot(c(1,1),pch = 19,col = my.pal.1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xlab, ylab = ylab,cex.lab = 1.3)
   for(i in 1:101){
-    col.temp<-col.matrix[i-1,]
-    #points(my.data,rep((i-1)/100,101),pch=15,col=col.temp, cex = 1)
-    }
-  seqs<-seq(0,100,(100/nquantiles))
-  seqs[1]<-1
+    col.temp <- col.matrix[i-1,]
+    #points(my.data,rep((i-1)/100,101),pch=15,col = col.temp, cex = 1)
+  }
+  seqs       <- seq(0,100,(100/nquantiles))
+  seqs[1]    <- 1
   col.matrix <- col.matrix[c(seqs), c(seqs)]
 }
-
 
 bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   quanmean<-rasterx
@@ -96,39 +93,78 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   r[1:length(r)]<-cols
   return(r)}
 
-
 function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
   
   
-  evReact <- eventReactive(input$addDim, {"new val"})
+  output$curText <- renderText({
+    input$store$text
+  })
+  
+  observe({
+    if (input$save <= 0){
+      # On initialization, set the value of the text editor to the current val.
+      updateTextInput(session, "text", value=isolate(input$store)$text)
+      
+      return()
+    }
+    updateStore(session, "text", isolate(input$text))
+  })
+  
+  
   
   block <- eventReactive(input$addDim, {
-    readRDS("cap_data/block_summary.rds")}, ignoreNULL = FALSE)
+    print(input$store)
+    print("inside block")
+    print(latestDim)
+    joinTable <- readRDS("cap_data/joinTable.rds")
+    extraList = c()
+    if(latestDim != ""){
+      extraList = c(latestDim)
+    }
+  
+    storeNames <- names(input$store)
+    for(ele in storeNames){
+      newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
+      extraList = c(extraList, newVal)
+      print(newVal)
+    }
+    sumData(joinTable,extraList = extraList)
+    }, ignoreNULL = FALSE)
+
   
   observeEvent(input$addDim, {
     print("adding the new function")
-    print(input$dim)
     print(tableTextGlobal)
     tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
     extracted <- tableTextGlobal[[1]][2]
     print(extracted)
     extracted <- substr(extracted,15,nchar(extracted)-1)
-    cat(extracted,input$dim,"\n",file="dim.txt",append=TRUE)
-    source("init.r")
-    source("global.r")
+    updateStore(session, input$dim, extracted)
+    assign("latestDim",paste(input$dim, extracted, sep ="---") , envir = .GlobalEnv)
     block()
-    vars[input$dim] <- input$dim
-    colHash[input$dim] <- input$dim
-    updateSelectInput(session = session,inputId = "x_color",choices = vars)
-    updateSelectInput(session = session,inputId = "y_color",choices = vars)
-    updateSelectInput(session = session,inputId = "hist_input",choices = vars)
-    updateSelectInput(session = session,inputId = "x_input",choices = vars)
-    updateSelectInput(session = session,inputId = "y_input",choices = vars)
+    #
+    
     })
+    
+    #cat(extracted,input$dim,"\n",file="dim.txt",append=TRUE)
+    #session$sendCustomMessage(type = 'testmessage', message = list(dimNAme = input$dim, dimVal = extracted))
+    
+    # source("init.r")
+    # source("global.r")
+    # block()
+    # vars[input$dim] <- input$dim
+    # colHash[input$dim] <- input$dim
+    # updateSelectInput(session = session,inputId = "x_color",choices = vars)
+    # updateSelectInput(session = session,inputId = "y_color",choices = vars)
+    # updateSelectInput(session = session,inputId = "hist_input",choices = vars)
+    # updateSelectInput(session = session,inputId = "x_input",choices = vars)
+    # updateSelectInput(session = session,inputId = "y_input",choices = vars)
+    
   
   observe({
+    
     choices <- eval(parse(text = paste0("levels(asset$",input$attr,")")))
     if(typeFunc(input$attr) == "non-numeric"){
       for(ele in choices){
@@ -139,14 +175,15 @@ function(input, output, session) {
       choices <- c("sum", "mean","sd")
     }
     updateSelectInput(session = session, inputId = "func", choices = choices)
-    
     })
-    
-    
+  
+  output$curText <- renderText({
+    input$store$text
+  })
+  
   output$legend_color <- renderPlot({
     col.matrix <- colmat.print(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
   })
-  
   
   output$map <- renderLeaflet({
     leaflet( ) %>%
@@ -156,9 +193,9 @@ function(input, output, session) {
   })
   
   output$functionbuilder <- DT::renderDataTable({
+    print("here")
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
-
     attrType <- typeFunc(input$attr)
     if(attrType == "non-numeric"){
       if(startsWith(input$func,"Percentage") == TRUE){
@@ -194,23 +231,25 @@ function(input, output, session) {
     
   })
   
-  output$hist <- renderPlot(
+  output$hist <- renderPlot({
     hist(block()[[colHash[[input$hist_input]]]], 
          main = "Histogram",
          xlab = input$hist_input
-    ))
+    )})
   
-  output$scatter <- renderPlot(
+  output$scatter <- renderPlot({
     xyplot(eval(parse(text=colHash[[input$x_input]])) ~eval(parse(text=colHash[[input$y_input]])), 
            block(),
            xlab = input$x_input,
            ylab = input$y_input)
+  }
   )
   
-  
+
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
+
     x_color_by   <- input$x_color
     y_color_by    <- input$y_color
     colorData <- dist[[colHash[[x_color_by]]]]

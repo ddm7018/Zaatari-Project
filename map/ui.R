@@ -1,69 +1,74 @@
 library(leaflet)
 library(rgdal)
-# Choices for drop-downs
-
-
-#move to core
+library(shinydashboard)
+library(shiny)
+library(shinyStore)
 
 
 navbarPage("Zaatari", id="nav",
-  tabPanel("Interactive map",
+    tabPanel("Interactive map",
       div(class="outer",
-      tags$head(
-        # Include our custom CSS
+          singleton(
+            tags$head(tags$script(src = "message-handler.js"))
+          ),
+            
+        tags$head(
+        includeScript("js.cookie.js"),
         includeCSS("styles.css"),
         includeScript("gomap.js")
       ),
       leafletOutput("map", width="100%", height="100%"),
-
+      initStore("store", "shinyStore-ex1"),
       # Shiny versions prior to 0.11 should use class="modal" instead.
       absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
         h2("Explorer"),
+        textInput("text", "Input:"),
+        actionButton("save", "Save", icon("save")),
+        div("Value stored currently:"),
+        textOutput("curText"),
         selectInput("x_color", "X Color", vars, selected = "sum_household"),
         selectInput("y_color", "Y Color", vars, selected = "literate"),
         plotOutput("legend_color")
-       
       ),
-      tags$div(id="cite",
-        'Daniel Mooney - RIT IST Capstone'
-      ))
+      tags$div(id="cite",'Daniel Mooney - RIT IST Capstone'))
   ),
 
   tabPanel("Raw Data",
     hr(),
-    DT::dataTableOutput("assetTable")),
+    DT::dataTableOutput("assetTable")
+    ),
   
   tabPanel("Summary Data",
     hr(),
     DT::dataTableOutput("sumTable")
   ),
+  
   tabPanel("Charts",
-           plotOutput("hist", height = 200),
-           plotOutput("scatter", height = 250),
-           absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
-                         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
-                         width = 330, height = "auto",
-                         h2("Explorer"),
-                         selectInput("hist_input", "Histogram", vars, selected = "literate"),
-                         selectInput("x_input", "X Input", vars, selected = "literate"),
-                         selectInput("y_input", "Y Input", vars, selected = "literate")
-                         )
-                         
-           
+      
+     plotOutput("hist", height = 200),
+     plotOutput("scatter", height = 250),
+     absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
+         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
+         width = 330, height = "auto",
+         h2("Explorer"),
+         selectInput("hist_input", "Histogram", vars, selected = "literate"),
+         selectInput("x_input", "X Input", vars, selected = "literate"),
+         selectInput("y_input", "Y Input", vars, selected = "literate"))
   ),
+  
   tabPanel("Console",
-  tags$iframe(width='100%', height= '500',
-              src='http://www.r-fiddle.org/#/fiddle?id=QMGrgLW9&version=1',
-              allowfullscreen='allowfullscreen', frameborder='0')),  
+    tags$iframe(width='100%', height= '500',
+                src='http://www.r-fiddle.org/#/fiddle?id=QMGrgLW9&version=1',
+                allowfullscreen='allowfullscreen', frameborder='0')),  
   
   tabPanel("Function Builder",
-  selectInput("attr", "Choose an attribute:",modifiedName),
-  selectInput("func", "Choose an function:",choices = NULL),
-  DT::dataTableOutput("functionbuilder"),
-  textInput("dim","","Dim1"),
-  actionButton("addDim", "Add Dimension")
+    selectInput("attr", "Choose an attribute:",modifiedName),
+    selectInput("func", "Choose an function:",choices = NULL),
+    DT::dataTableOutput("functionbuilder"),
+    textInput("dim","","Dim1"),
+    actionButton("addDim", "Add Dimension")
   ),
   
  tabPanel("Upload",

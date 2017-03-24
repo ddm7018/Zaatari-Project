@@ -3,12 +3,11 @@ library(hash)
 library(rgdal)
 
 #tableTextGlobal <- "old"
-
-asset <- readRDS("cap_data/raw_assets.rds")
+latestDim <- ""
+asset <- readRDS("cap_data/joinTable.rds")
 block <- readRDS("cap_data/block_summary.rds")
-
-dist <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
-dist <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+dist  <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
+dist  <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 #move to core.R
 dimFile <- read.table("dim.txt")
@@ -38,8 +37,7 @@ modifiedName[240] <-  modifiedName[2]
 modifiedName <- modifiedName[-1]
 modifiedName <- modifiedName[-1]
 
-asset[asset$education_skills.literate == "other"] = NA
-
+#asset[asset$education_skills.literate == "other"] = NA
 
 #move reading Dim to core.R
 colHash <- hash()
