@@ -1,8 +1,8 @@
-$("[data-value='Function Builder']")[1].children[0].style.width = "500px";
+$("[data-value='Dimension Builder']")[1].children[0].style.width = "500px";
 
 var element = document.getElementById("addDim");
 element.addEventListener("click", function(e) { 
-  var addDimVal = $("[data-value='Function Builder']")[1].children[3].children[1].value;
+  var addDimVal = $("[data-value='Dimension Builder']")[1].children[3].children[1].value;
   var doesExist = false;
   for (var key in localStorage){
    if(key.endsWith(addDimVal)){
@@ -16,17 +16,13 @@ element.addEventListener("click", function(e) {
     alert("User can only store ten dimensions");
   }
   else{
-    alert("Adding Dim Val " + addDimVal);
+    alert("Adding Dimension " + addDimVal);
     document.getElementsByTagName("li")[0].children[0].click(); 
   }}, false);
   
-  
-  
-  
-
 var element = document.getElementById("dltFunc");
 element.addEventListener("click", function(e) { 
-  var list1 = $("[data-value='Function Builder']")[1].children[5].children[0].children[3].children[1].children;
+  var list1 = $("[data-value='Dimension Builder']")[1].children[5].children[0].children[3].children[1].children;
   var anyToDelete = false;
   for (i = 0; i < list1.length; i++) { 
     var selectedBool = list1[i].className.endsWith("selected");
@@ -34,7 +30,7 @@ element.addEventListener("click", function(e) {
       var selectedVal = list1[i].children[1].innerHTML;
       var localStorageVal = "shinyStore-ex1\\".concat(selectedVal);
       localStorage.removeItem(localStorage.key(localStorageVal));
-      alert("Removing " + selectedVal);
+      alert("Removing Dimension " + selectedVal);
       anyToDelete = true;
     }
   }

@@ -63,7 +63,6 @@ navbarPage("Zaatari", id="nav",
     DT::dataTableOutput("dimbuilder"),
     textInput("dim","","Dim1"),
     actionButton("addDim", "Add Dimension"),
-    tags$br(),
     DT::dataTableOutput("editor"),
     actionButton("dltFunc", "Delete Selected Dimension")
   ),
