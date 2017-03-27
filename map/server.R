@@ -287,17 +287,17 @@ function(input, output, session) {
   
   # # Show a popup at the given location
   showBlockPopup <- function(block1, lat, lng) {
-    
-    
+
     lat <- round(lat,5)  
     lng <- round(lng,5)
     coords <- as.data.frame(cbind(lng, lat))
     point <- SpatialPoints(coords)
     proj4string(point) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-    findDistrict <- dist[point,]
-
+    findDistrictinDist <- dist[point,]
+    findDistrict <- block()[block()$block == findDistrictinDist$Block &  block()$district == findDistrictinDist$District,]
+    
     content <- as.character(tagList(
-      tags$h4("District",findDistrict$District,"- Block",findDistrict$Block), 
+      tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
       tags$h4("Total Educated Residents: ",findDistrict$literate),
       tags$h4("Literacy Rate: ",findDistrict$literacy_rate),
