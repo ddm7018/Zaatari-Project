@@ -27,6 +27,7 @@ element.addEventListener("click", function(e) {
 var element = document.getElementById("dltFunc");
 element.addEventListener("click", function(e) { 
   var list1 = $("[data-value='Function Builder']")[1].children[5].children[0].children[3].children[1].children;
+  var anyToDelete = false;
   for (i = 0; i < list1.length; i++) { 
     var selectedBool = list1[i].className.endsWith("selected");
     if(selectedBool){
@@ -34,9 +35,15 @@ element.addEventListener("click", function(e) {
       var localStorageVal = "shinyStore-ex1\\".concat(selectedVal);
       localStorage.removeItem(localStorage.key(localStorageVal));
       alert("Removing " + selectedVal);
+      anyToDelete = true;
     }
   }
+  if(anyToDelete){
   location.reload();
+  }
+  else{
+    alert("Nothing to delete");
+  }
   
   }, false);
 
