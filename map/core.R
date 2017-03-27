@@ -65,7 +65,11 @@ sumData <- function(joinTable,extraList = NULL){
                                                              eval(parse(text =l[7])),
                                                              eval(parse(text =l[8])),
                                                              eval(parse(text =l[9])),
-                                                             eval(parse(text =l[10]))),
+                                                             eval(parse(text =l[10])),
+                                                             eval(parse(text =l[11])),
+                                                             eval(parse(text =l[12])),
+                                                             eval(parse(text =l[13])),
+                                                             eval(parse(text =l[14]))),
                                                       by = list(district,collector.block_number)])
 
   colnames(blockSumTable)[2] <- "block"

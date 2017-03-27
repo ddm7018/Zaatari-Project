@@ -8,11 +8,10 @@ library(shinyStore)
 navbarPage("Zaatari", id="nav",
     tabPanel("Interactive map",
       div(class="outer",
-          singleton(
-            tags$head(tags$script(src = "message-handler.js"))
-          ),
-            
+          
+         
         tags$head(
+         
         includeCSS("styles.css"),
         includeScript("gomap.js")
       ),
@@ -23,10 +22,6 @@ navbarPage("Zaatari", id="nav",
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
         h2("Explorer"),
-        textInput("text", "Input:"),
-        actionButton("save", "Save", icon("save")),
-        div("Value stored currently:"),
-        textOutput("curText"),
         selectInput("x_color", "X Color", vars, selected = "sum_household"),
         selectInput("y_color", "Y Color", vars, selected = "literate"),
         plotOutput("legend_color")
@@ -67,9 +62,11 @@ navbarPage("Zaatari", id="nav",
     selectInput("func", "Choose an function:",choices = NULL),
     DT::dataTableOutput("functionbuilder"),
     textInput("dim","","Dim1"),
-    actionButton("addDim", "Add Dimension")
+    actionButton("addDim", "Add Dimension"),
+    DT::dataTableOutput("editor"),
+    actionButton("dltFunc", "Delete Selected Dimension")
   ),
-  
+
  tabPanel("Upload",
           titlePanel("Uploading Files"),
           sidebarLayout(
@@ -80,17 +77,6 @@ navbarPage("Zaatari", id="nav",
                                  text/plain','.csv')),
               tags$hr(),
               actionButton("evReactiveButton", "evReactiveButton")
-              #checkboxInput('header', 'Header', TRUE),
-              #radioButtons('sep', 'Separator',
-              #             c(Comma=',',
-              #               Semicolon=';',
-              #               Tab='\t'),
-              #             ','),
-            #  radioButtons('quote', 'Quote',
-            #               c(None='',
-            #                 'Double Quote'='"',
-            #                 'Single Quote'="'"),
-            #               '"')
             ),
             mainPanel(
               tableOutput('contents')
@@ -98,5 +84,6 @@ navbarPage("Zaatari", id="nav",
           )
  ),
 
-  conditionalPanel("false", icon("crosshair"))
+  conditionalPanel("false", icon("crosshair"),
+                   includeScript("message-handler.js"))
 )

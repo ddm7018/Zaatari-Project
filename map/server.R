@@ -13,8 +13,9 @@ source("core.R")
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
 
+
+
 typeFunc <- function(ele){
-  print('insideTypeFun')
   t <- eval(parse(text=paste0("levels(asset$",ele,")")))
   if(typeof(t) == 'NULL'){
     return("null")
@@ -96,24 +97,7 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
 function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
-  
-  
-  output$curText <- renderText({
-    input$store$text
-  })
-  
-  observe({
-    if (input$save <= 0){
-      # On initialization, set the value of the text editor to the current val.
-      updateTextInput(session, "text", value=isolate(input$store)$text)
-      
-      return()
-    }
-    updateStore(session, "text", isolate(input$text))
-  })
-  
-  
-  
+
   block <- eventReactive(input$addDim, {
     print(input$store)
     print("inside block")
@@ -133,34 +117,30 @@ function(input, output, session) {
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
 
-  
+
   observeEvent(input$addDim, {
-    print("adding the new function")
-    print(tableTextGlobal)
-    tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
-    extracted <- tableTextGlobal[[1]][2]
-    print(extracted)
-    extracted <- substr(extracted,15,nchar(extracted)-1)
-    updateStore(session, input$dim, extracted)
-    assign("latestDim",paste(input$dim, extracted, sep ="---") , envir = .GlobalEnv)
-    block()
+    if(!input$dim %in% names(input$store) & length(names(input$store)) < 10){
+      print("adding the new function")
+      print(tableTextGlobal)
+      tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
+      extracted <- tableTextGlobal[[1]][2]
+      print(extracted)
+      extracted <- substr(extracted,15,nchar(extracted)-1)
+      updateStore(session, input$dim, extracted)
+      assign("latestDim",paste(input$dim, extracted, sep ="---") , envir = .GlobalEnv)
+      session$sendCustomMessage("type", "message")
+      block()
+    }
     #
-    
     })
     
     #cat(extracted,input$dim,"\n",file="dim.txt",append=TRUE)
     #session$sendCustomMessage(type = 'testmessage', message = list(dimNAme = input$dim, dimVal = extracted))
-    
-    # source("init.r")
-    # source("global.r")
-    # block()
+
     # vars[input$dim] <- input$dim
     # colHash[input$dim] <- input$dim
     # updateSelectInput(session = session,inputId = "x_color",choices = vars)
     # updateSelectInput(session = session,inputId = "y_color",choices = vars)
-    # updateSelectInput(session = session,inputId = "hist_input",choices = vars)
-    # updateSelectInput(session = session,inputId = "x_input",choices = vars)
-    # updateSelectInput(session = session,inputId = "y_input",choices = vars)
     
   
   observe({
@@ -177,13 +157,15 @@ function(input, output, session) {
     updateSelectInput(session = session, inputId = "func", choices = choices)
     })
   
-  output$curText <- renderText({
-    input$store$text
-  })
   
   output$legend_color <- renderPlot({
     col.matrix <- colmat.print(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
   })
+  
+  output$editor <- DT::renderDataTable({
+    data.table(val1 = names(input$store),val2 = input$store)
+  })
+  
   
   output$map <- renderLeaflet({
     leaflet( ) %>%
@@ -249,9 +231,30 @@ function(input, output, session) {
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
-
+    for(ele in names(input$store)){
+      vars[ele] = ele
+      colHash[ele] = ele
+    }
+    updateSelectInput(session = session,inputId = "x_color",choices = vars, selected = input$x_color)
+    updateSelectInput(session = session,inputId = "y_color",choices = vars, selected = input$y_color)
+    updateSelectInput(session = session,inputId = "hist_input",choices = vars, selected = input$hist_input)
+    updateSelectInput(session = session,inputId = "x_input",choices = vars, selected = input$x_input)
+    updateSelectInput(session = session,inputId = "y_input",choices = vars, selected = input$y_input)
+    
     x_color_by   <- input$x_color
     y_color_by    <- input$y_color
+    
+    for(attr in vars) {
+      dist[[as.character(attr)]] <- 0
+    }
+    for(i in 1:nrow(data.frame(dist))){
+      result <- block()[block()$district == dist[i,]$District & block()$block == dist[i,]$Block,]
+      if (nrow(result) > 0 ){
+        for(j in vars) {
+          dist[[as.character(j)]][i] <- result[[as.character(j)]]
+        }
+      }
+    }
     colorData <- dist[[colHash[[x_color_by]]]]
     pal       <- colorBin("Blues", colorData, 7)
     
@@ -269,13 +272,6 @@ function(input, output, session) {
       return(l)
     }  
     
-    #   leafletProxy("map", data = block()) %>%
-    #     clearShapes() %>%
-    #     addCircles(~long, ~lat, radius = radius,
-    #                stroke=FALSE, fillOpacity=0.8, fillColor=pal(colorData)) %>%
-    #     addLegend("bottomleft", pal=pal, values=colorData, title=colorBy,
-    #               layerId="colorLegend")
-    # 
     col.matrix <- colmat(nquantiles=4)
     x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4)
     
