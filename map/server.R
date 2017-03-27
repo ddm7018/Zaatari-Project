@@ -71,14 +71,25 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   quanmean[quanmean ==0] <- NA
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  r1 <- within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))
+  print(' ')
+  print(brks)
+  r1 <- tryCatch({
+    within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
+    error = function(e) {
+      within(temp, quantile <- cut(quanmean, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
+    })
+    
   quantr<-data.frame(r1[,2]) 
   quanvar<-rastery
   quanvar[quanvar ==0] <- NA
   temp <- data.frame(quanvar, quantile=rep(NA, length(quanvar)))
-  brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  #print(brks)
-  r2 <- within(temp, quantile <- cut(quanvar, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))
+  brks <- unique(with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles)))))
+  print(brks)
+  r2 <- tryCatch({
+    within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
+    error = function(e) {
+      within(temp, quantile <- cut(quanmean, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
+    })
   quantr2<-data.frame(r2[,2])
   as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
   col.matrix2<-colormatrix
@@ -144,7 +155,8 @@ function(input, output, session) {
     
   
   observe({
-    
+    print(input$attr)
+    if(input$attr %in% modifiedName){
     choices <- eval(parse(text = paste0("levels(asset$",input$attr,")")))
     if(typeFunc(input$attr) == "non-numeric"){
       for(ele in choices){
@@ -155,6 +167,7 @@ function(input, output, session) {
       choices <- c("sum", "mean","sd")
     }
     updateSelectInput(session = session, inputId = "func", choices = choices)
+    }
     })
   
   
@@ -175,7 +188,8 @@ function(input, output, session) {
   })
   
   output$functionbuilder <- DT::renderDataTable({
-    print("here")
+    if(input$attr %in% modifiedName){
+    print(input$attr)
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
     attrType <- typeFunc(input$attr)
@@ -201,7 +215,7 @@ function(input, output, session) {
       e
     })
     
-  })
+  }})
   
   output$contents <- DT::renderDataTable({
     

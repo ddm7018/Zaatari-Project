@@ -58,7 +58,7 @@ navbarPage("Zaatari", id="nav",
                 allowfullscreen='allowfullscreen', frameborder='0')),  
   
   tabPanel("Function Builder",
-    selectInput("attr", "Choose an attribute:",modifiedName),
+    selectizeInput("attr", "Choose an attribute:",modifiedName),
     selectInput("func", "Choose an function:",choices = NULL),
     DT::dataTableOutput("functionbuilder"),
     textInput("dim","","Dim1"),
