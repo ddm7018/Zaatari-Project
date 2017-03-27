@@ -197,7 +197,7 @@ function(input, output, session) {
     
   })
   
-  output$functionbuilder <- DT::renderDataTable({
+  output$dimbuilder <- DT::renderDataTable({
     if(input$attr %in% modifiedName){
     print(input$attr)
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
