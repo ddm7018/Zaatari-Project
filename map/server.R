@@ -140,7 +140,7 @@ function(input, output, session) {
 
 
   observeEvent(input$addDim, {
-    if(!input$dim %in% names(input$store) & length(names(input$store)) < 10){
+    if(!input$dim %in% names(input$store) & length(names(input$store)) < 10 & !grepl(" ", input$dim)){
       print("adding the new function")
       print(tableTextGlobal)
       tableTextGlobal<- strsplit(tableTextGlobal, "summarize")

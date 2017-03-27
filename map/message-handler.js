@@ -13,8 +13,12 @@ element.addEventListener("click", function(e) {
     alert("Use a name that is not already taken");
   }
   else if(localStorage.length == 10){
-    alert("User can only store ten dimensions");
+    alert("User can only store ten dimensions, please delete some");
   }
+  else if($("[data-value='Dimension Builder']")[1].children[3].children[1].value.search(" ") != -1){
+    alert("Dimension names can not have spaces.");
+  }
+  
   else{
     alert("Adding Dimension " + addDimVal);
     document.getElementsByTagName("li")[0].children[0].click(); 
