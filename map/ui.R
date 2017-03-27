@@ -67,22 +67,22 @@ navbarPage("Zaatari", id="nav",
     actionButton("dltFunc", "Delete Selected Dimension")
   ),
 
- tabPanel("Upload",
-          titlePanel("Uploading Files"),
-          sidebarLayout(
-            sidebarPanel(
-              fileInput('file1', 'Choose XML File',
-                        accept=c('text/csv',
-                                 'text/comma-separated-values,
-                                 text/plain','.csv')),
-              tags$hr(),
-              actionButton("evReactiveButton", "evReactiveButton")
-            ),
-            mainPanel(
-              tableOutput('contents')
-            )
-          )
- ),
+ # tabPanel("Upload",
+ #          titlePanel("Uploading Files"),
+ #          sidebarLayout(
+ #            sidebarPanel(
+ #              fileInput('file1', 'Choose XML File',
+ #                        accept=c('text/csv',
+ #                                 'text/comma-separated-values,
+ #                                 text/plain','.csv')),
+ #              tags$hr(),
+ #              actionButton("evReactiveButton", "evReactiveButton")
+ #            ),
+ #            mainPanel(
+ #              tableOutput('contents')
+ #            )
+ #          )
+ # ),
 
   conditionalPanel("false", icon("crosshair"),
                    includeScript("message-handler.js"))
