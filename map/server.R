@@ -296,13 +296,19 @@ function(input, output, session) {
     findDistrictinDist <- dist[point,]
     findDistrict <- block()[block()$block == findDistrictinDist$Block &  block()$district == findDistrictinDist$District,]
     
-    content <- as.character(tagList(
+    popupTagList <- tagList(
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
       tags$h4("Total Educated Residents: ",findDistrict$literate),
       tags$h4("Literacy Rate: ",findDistrict$literacy_rate),
       tags$h4("Average Information Source Age: ",findDistrict$average_informat)
-    ))
+    )
+    
+    for(ele in names(input$store)){ 
+      popupTagList <- tagAppendChild(popupTagList, tags$h4(ele,eval(parse(text=paste0("findDistrict$",ele)))))
+      }
+    
+    content <- as.character(popupTagList)
     leafletProxy("map") %>% addPopups(lng, lat, content, layerId = dist)
   }
   
