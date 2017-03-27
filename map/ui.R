@@ -54,7 +54,7 @@ navbarPage("Zaatari", id="nav",
   
   tabPanel("Console",
     tags$iframe(width='100%', height= '500',
-                src='http://www.r-fiddle.org/#/fiddle?id=QMGrgLW9&version=1',
+                src='http://www.r-fiddle.org/#/fiddle?id=QMGrgLW9&version=4',
                 allowfullscreen='allowfullscreen', frameborder='0')),  
   
   tabPanel("Function Builder",
