@@ -346,7 +346,9 @@ function(input, output, session) {
       }
     
     content <- as.character(popupTagList)
-    leafletProxy("map") %>% addPopups(lng, lat, content, layerId = dist)
+    if(nrow(findDistrict) > 0){
+      leafletProxy("map") %>% addPopups(lng, lat, content, layerId = dist)
+    }
   }
   
   # When map is clicked, show a popup with city info
