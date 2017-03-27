@@ -66,9 +66,16 @@ colmat <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorValue = 2
   col.matrix <- col.matrix[c(seqs), c(seqs)]
 }
 
-bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
+bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4, data){
+  
   quanmean<-rasterx
-  quanmean[quanmean ==0] <- NA
+  for(ele in 1:length(data$sum_household)){
+    if(data$sum_household[ele] == 0 & quanmean[ele] == 0){
+      quanmean[ele] <- NA
+    }
+  }
+  
+  
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
   print(brks)
@@ -80,12 +87,16 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
     
   quantr<-data.frame(r1[,2]) 
   quanvar<-rastery
-  quanvar[quanvar ==0] <- NA
+  for(ele in 1:length(data$sum_household)){
+    if(data$sum_household[ele] == 0 & quanvar[ele] == 0){
+      quanvar[ele] <- NA
+    }
+  }
   temp <- data.frame(quanvar, quantile=rep(NA, length(quanvar)))
-  brks <- unique(with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles)))))
-  print(brks)
+  brks1 <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
+  print(brks1)
   r2 <- tryCatch({
-    within(temp, quantile <- cut(quanvar, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
+    within(temp, quantile <- cut(quanvar, breaks = brks1, labels = 2:length(brks),include.lowest = TRUE))},
     error = function(e) {
       within(temp, quantile <- cut(quanvar, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
     })
@@ -286,11 +297,24 @@ function(input, output, session) {
     }  
     
     col.matrix <- colmat(nquantiles=4)
-    x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4)
+    x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4, data = dist)
+    
+    for(i in 1:length(x)){ 
+        print(i)
+        print(x[i])
+        print(dist$Dim1[i])
+        print(dist$Block[i])
+        print(dist$District[i])
+        cat("\n")
+        }
+    #browser()
+    z <- unique(col.matrix)[x]
+    z[is.na(z)] <- 0
+    z[startsWith(z,"#")] <- 1
     
     leafletProxy("map", data = dist) %>%
       addPolygons(color = "#444444", weight = 0.01, smoothFactor = 1.0,
-                  opacity = 1, fillOpacity = noData(colorData),
+                  opacity = 1, fillOpacity = z,
                   fillColor=unique(col.matrix)[x]
                   #highlightOptions = highlightOptions(weight = 1,
                   #                                    color = "white",
