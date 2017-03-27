@@ -71,7 +71,6 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   quanmean[quanmean ==0] <- NA
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  print(' ')
   print(brks)
   r1 <- tryCatch({
     within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
@@ -86,9 +85,9 @@ bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4){
   brks <- unique(with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles)))))
   print(brks)
   r2 <- tryCatch({
-    within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
+    within(temp, quantile <- cut(quanvar, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
     error = function(e) {
-      within(temp, quantile <- cut(quanmean, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
+      within(temp, quantile <- cut(quanvar, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
     })
   quantr2<-data.frame(r2[,2])
   as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
