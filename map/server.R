@@ -139,7 +139,7 @@ function(input, output, session) {
 
 
   observeEvent(input$addDim, {
-    if(!input$dim %in% names(input$store) & length(names(input$store)) < 10 & !grepl(" ", input$dim)){
+    if(!input$dim %in% names(input$store) & length(names(input$store)) < 10 & regexpr("\\W+",input$dim ) == -1){
       print("adding the new function")
       print(tableTextGlobal)
       tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
@@ -341,7 +341,7 @@ function(input, output, session) {
     )
     
     for(ele in names(input$store)){ 
-      popupTagList <- tagAppendChild(popupTagList, tags$h4(ele,eval(parse(text=paste0("findDistrict$",ele)))))
+      popupTagList <- tagAppendChild(popupTagList, tags$h4(ele,round(eval(parse(text=paste0("findDistrict$",ele))),2)))
       }
     
     content <- as.character(popupTagList)

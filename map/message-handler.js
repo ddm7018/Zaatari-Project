@@ -15,8 +15,8 @@ element.addEventListener("click", function(e) {
   else if(localStorage.length == 10){
     alert("User can only store ten dimensions, please delete some");
   }
-  else if($("[data-value='Dimension Builder']")[1].children[3].children[1].value.search(" ") != -1){
-    alert("Dimension names can not have spaces.");
+  else if(RegExp(/\W+/g).exec($("[data-value='Dimension Builder']")[1].children[3].children[1].value) !== null){
+    alert("Dimension names must be letters, numbers or underscores.");
   }
   
   else{
