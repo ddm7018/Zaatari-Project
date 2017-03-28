@@ -53,6 +53,7 @@ element.addEventListener("click", function(e) {
     }
   }
   if(anyToDelete){
+  waitSeconds(3000);
   location.reload();
   }
   else{

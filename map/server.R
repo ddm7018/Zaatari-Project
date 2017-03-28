@@ -132,7 +132,7 @@ function(input, output, session) {
     storeNames <- names(input$store)
     for(ele in storeNames){
       newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
-      extraList = c(extraList, newVal)
+      extraList = c(extraList)
     }
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
@@ -384,7 +384,18 @@ function(input, output, session) {
   
   ## Data Explorer ###########################################
   output$sumTable <- DT::renderDataTable({
-    df <- block() %>% mutate()
+    joinTable <- readRDS("cap_data/joinTable.rds")
+    extraList = c()
+    storeNames <- names(input$store)
+    for(ele in storeNames){
+      newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
+      extraList = c(extraList, newVal)
+    }
+    temp <- sumData(joinTable,extraList = extraList)
+    browser()
+    
+    df <- temp %>% mutate()
+    val <- strsplit(latestDim,"---")[[1]][1]
     action <- DT::dataTableAjax(session, df)
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
