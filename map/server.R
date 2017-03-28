@@ -272,6 +272,8 @@ function(input, output, session) {
     for(attr in vars) {
       dist[[as.character(attr)]] <- 0
     }
+    
+    
     for(i in 1:nrow(data.frame(dist))){
       result <- block()[block()$district == dist[i,]$District & block()$block == dist[i,]$Block,]
       if (nrow(result) > 0 ){

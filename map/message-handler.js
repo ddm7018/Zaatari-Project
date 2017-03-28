@@ -35,7 +35,7 @@ element.addEventListener("click", function(e) {
   else{
     alert("Adding Dimension " + addDimVal);
     waitSeconds(3000);
-    document.getElementsByTagName("li")[0].children[0].click(); 
+    location.reload(); 
   }}, false);
   
 var element = document.getElementById("dltFunc");
