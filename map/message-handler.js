@@ -1,4 +1,17 @@
-$("[data-value='Dimension Builder']")[1].children[0].style.width = "500px";
+$("[data-value='Dimension Builder']")[1].children[0].style.width = "400px";
+$("[data-value='Dimension Builder']")[1].children[1].style.width = "400px";
+$("[data-value='Dimension Builder']")[1].children[5].style.paddingTop = "50px";
+
+function waitSeconds(iMilliSeconds) {
+    var counter= 0
+        , start = new Date().getTime()
+        , end = 0;
+    while (counter < iMilliSeconds) {
+        end = new Date().getTime();
+        counter = end - start;
+    }
+}
+
 
 var element = document.getElementById("addDim");
 element.addEventListener("click", function(e) { 
@@ -21,6 +34,7 @@ element.addEventListener("click", function(e) {
   
   else{
     alert("Adding Dimension " + addDimVal);
+    waitSeconds(3000);
     document.getElementsByTagName("li")[0].children[0].click(); 
   }}, false);
   

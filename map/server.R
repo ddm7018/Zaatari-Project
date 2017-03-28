@@ -246,7 +246,9 @@ function(input, output, session) {
     xyplot(eval(parse(text=colHash[[input$x_input]])) ~eval(parse(text=colHash[[input$y_input]])), 
            block(),
            xlab = input$x_input,
-           ylab = input$y_input)
+           ylab = input$y_input,
+           main="Scatter Plot",
+           type = c("p","r"))
   }
   )
   
@@ -309,11 +311,11 @@ function(input, output, session) {
     #browser()
     z <- unique(col.matrix)[x]
     z[is.na(z)] <- 0
-    z[startsWith(z,"#")] <- 1
-    
-    leafletProxy("map", data = dist) %>%
+    z[startsWith(z,"#")] <- .75
+
+    leafletProxy("map", data = dist) %>% clearShapes() %>%
       addPolygons(color = "#444444", weight = 0.01, smoothFactor = 1.0,
-                  opacity = 1, fillOpacity = z,
+                  opacity = .75, fillOpacity = z,
                   fillColor=unique(col.matrix)[x]
                   #highlightOptions = highlightOptions(weight = 1,
                   #                                    color = "white",
@@ -363,6 +365,21 @@ function(input, output, session) {
   })
   #
   
+  output$downloadRawData <- downloadHandler(
+    filename = function() { paste("rawData", '.csv', sep='') },
+    content = function(file) {
+      write.csv(asset, file)
+    }
+  )
+  
+  output$downloadSumData <- downloadHandler(
+    filename = function() { paste("sumData", '.csv', sep='') },
+    content = function(file) {
+      write.csv(block(), file)
+    }
+  )
+  
+  
   ## Data Explorer ###########################################
   output$sumTable <- DT::renderDataTable({
     df <- block() %>% mutate()
@@ -370,7 +387,14 @@ function(input, output, session) {
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
   output$assetTable <- DT::renderDataTable({
+
     df <- asset %>% mutate()
+    df[, "start"] <- NULL 
+    df[, "end"] <- NULL 
+    df[, "today"] <- NULL
+    df[,"meta.instanceID"] <- NULL
+    df[,"X_uuid"] <- NULL
+    df[,"X_submission_time"] <- NULL
     action <- DT::dataTableAjax(session, df)
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })

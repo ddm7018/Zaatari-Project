@@ -16,6 +16,10 @@ modifiedName <- modifiedName[-which(modifiedName == "X_notes")]
 modifiedName <- modifiedName[-which(modifiedName == "start")]
 modifiedName <- modifiedName[-which(modifiedName == "end")]
 modifiedName <- modifiedName[-which(modifiedName == "today")]
+modifiedName <- modifiedName[-which(modifiedName == "meta.instanceID")]
+modifiedName <- modifiedName[-which(modifiedName == "X_uuid")]
+modifiedName <- modifiedName[-which(modifiedName == "X_submission_time")]
+
 
 modifiedName[239] <-  modifiedName[1]
 modifiedName[240] <-  modifiedName[2]

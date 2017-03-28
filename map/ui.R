@@ -31,25 +31,27 @@ navbarPage("Zaatari", id="nav",
 
   tabPanel("Raw Data",
     hr(),
-    DT::dataTableOutput("assetTable")
+    DT::dataTableOutput("assetTable"),
+    downloadButton('downloadRawData', 'Download')
     ),
   
   tabPanel("Summary Data",
     hr(),
-    DT::dataTableOutput("sumTable")
+    DT::dataTableOutput("sumTable"),
+    downloadButton('downloadSumData', 'Download')
+    
   ),
   
   tabPanel("Charts",
-      
-     plotOutput("hist", height = 200),
-     plotOutput("scatter", height = 250),
-     absolutePanel(id = "controls", class = "panel panel-default", fixed = FALSE,
-         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
-         width = 330, height = "auto",
+  
+     sidebarPanel(id = "controls", class = "panel panel-default",
          h2("Explorer"),
          selectInput("hist_input", "Histogram", vars, selected = "literate"),
          selectInput("x_input", "X Input", vars, selected = "literate"),
-         selectInput("y_input", "Y Input", vars, selected = "literate"))
+         selectInput("y_input", "Y Input", vars, selected = "literate")),
+     mainPanel(
+     plotOutput("hist", height = 250),
+     plotOutput("scatter", height = 250))
   ),
   
   tabPanel("Console",
