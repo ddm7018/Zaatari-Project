@@ -133,7 +133,6 @@ function(input, output, session) {
     for(ele in storeNames){
       newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
       extraList = c(extraList, newVal)
-      print(newVal)
     }
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
@@ -299,14 +298,14 @@ function(input, output, session) {
     col.matrix <- colmat(nquantiles=4)
     x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4, data = dist)
     
-    for(i in 1:length(x)){ 
-        print(i)
-        print(x[i])
-        print(dist$Dim1[i])
-        print(dist$Block[i])
-        print(dist$District[i])
-        cat("\n")
-        }
+    #for(i in 1:length(x)){ 
+        #print(i)
+        #print(x[i])
+        #print(dist$Dim1[i])
+        #print(dist$Block[i])
+        #print(dist$District[i])
+        #cat("\n")
+        #}
     #browser()
     z <- unique(col.matrix)[x]
     z[is.na(z)] <- 0
@@ -332,13 +331,13 @@ function(input, output, session) {
     proj4string(point) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
     findDistrictinDist <- dist[point,]
     findDistrict <- block()[block()$block == findDistrictinDist$Block &  block()$district == findDistrictinDist$District,]
-    
+
     popupTagList <- tagList(
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
-      tags$h4("Total Educated Residents: ",findDistrict$literate),
-      tags$h4("Literacy Rate: ",findDistrict$literacy_rate),
-      tags$h4("Average Information Source Age: ",findDistrict$average_informat)
+      tags$h4("Total Literate Residents: ",findDistrict$literate),
+      tags$h4("Literacy Rate: ",round(findDistrict$literacy_rate,3)),
+      tags$h4("Average Age of Reported Informantion Source: ",round(findDistrict$average_informat,3))
     )
     
     for(ele in names(input$store)){ 
