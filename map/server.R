@@ -336,8 +336,8 @@ function(input, output, session) {
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
       tags$h4("Total Literate Residents: ",findDistrict$literate),
-      tags$h4("Literacy Rate: ",round(findDistrict$literacy_rate,3)),
-      tags$h4("Average Age of Reported Informantion Source: ",round(findDistrict$average_informat,3))
+      tags$h4("Literacy Rate: ",round(findDistrict$literacy_rate,2)),
+      tags$h4("Average Age of Reported Informantion Source: ",round(findDistrict$average_informat,2))
     )
     
     for(ele in names(input$store)){ 
