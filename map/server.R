@@ -162,7 +162,7 @@ function(input, output, session) {
     # updateSelectInput(session = session,inputId = "x_color",choices = vars)
     # updateSelectInput(session = session,inputId = "y_color",choices = vars)
   output$testOutput <- renderText({ 
-    table <- read.csv("asset_mapping.csv")
+    table <- read.csv("asset-map.csv")
     as.character(table[table$x == input$attr,]["X.1"]$X.1)
   })  
   

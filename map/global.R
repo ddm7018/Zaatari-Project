@@ -10,7 +10,7 @@ dist  <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
 dist  <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 modifiedName = c()
-table <- read.csv("asset_map")
+table <- read.csv("asset-map.csv")
 for(ele in table$x){
   modifiedName <- c(modifiedName,ele)
 }
