@@ -54,8 +54,7 @@
 57,activities_hobbies_social.volunteer_yesno,How many houses have family members that volunteer time?
 58,activities_hobbies_social.volunteer_ngo,What organization do family members volunteer for?
 59,education_skills.high_education,What is the highest level of education in the household?
-60,education_skills.literate,How many family members are literate?
-61,education_skills.literate_other,How many family members are literate?
+60,literate,How many family members are literate?
 62,education_skills.language.Arabic,How many houses have family members who speak Arabic?
 63,education_skills.language.English,How many houses have family members who speak English?
 64,education_skills.language.French,How many houses have family members who speak French?

@@ -31,6 +31,17 @@ d2$information.age_informant[d2$information.age_informant == "64_"] <- "65"
 joinTable   <- smartbind(d2,d8)
 joinTable   <- smartbind(joinTable,d9)
 
+
+joinTable[joinTable$education_skills.literate == "other",]$education_skills.literate <-NA
+joinTable[joinTable$education_skills.literate_other == "n/a",]$education_skills.literate_other<- NA
+
+joinTable$literate <- NA
+for(ele in 1:nrow(joinTable)){
+   joinTable$literate[ele] <- sum(as.numeric(as.character(joinTable$education_skills.literate[ele])),as.numeric(as.character(joinTable$education_skills.literate_other[ele])),na.rm = TRUE)
+}
+
+
+
 saveRDS(joinTable, "cap_data/joinTable.rds")
 
 #reading and parsing the block locations from the kml files
