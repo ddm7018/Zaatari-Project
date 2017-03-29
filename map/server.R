@@ -280,7 +280,11 @@ function(input, output, session) {
       if (nrow(result) > 0 ){
         print(i)
         for(j in vars) {
-         dist[[as.character(j)]][i] <- result[[as.character(j)]] 
+         result1 <- tryCatch({dist[[as.character(j)]][i] <- result[[as.character(j)]]},
+                  error = function(e){
+                    print(e)
+                  })
+           
         }
       }
     }
@@ -343,7 +347,7 @@ function(input, output, session) {
       tags$h4("Total Residents: ",findDistrict$sum_household),
       tags$h4("Total Literate Residents: ",findDistrict$literate),
       tags$h4("Literacy Rate: ",round(findDistrict$literacy_rate,2)),
-      tags$h4("Average Age of Reported Informantion Source: ",round(findDistrict$average_informat,2))
+      tags$h4("Average Age of Reported Information Source: ",round(findDistrict$average_informat,2))
     )
     
     for(ele in names(input$store)){ 
