@@ -61,6 +61,7 @@ navbarPage("Zaatari", id="nav",
   
   tabPanel("Dimension Builder",
     selectizeInput("attr", "Choose an attribute:",modifiedName),
+    textOutput("testOutput"),
     selectInput("func", "Choose an function:",choices = NULL),
     DT::dataTableOutput("dimbuilder"),
     textInput("dim","","Dim1"),

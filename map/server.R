@@ -132,7 +132,7 @@ function(input, output, session) {
     storeNames <- names(input$store)
     for(ele in storeNames){
       newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
-      extraList = c(extraList)
+      extraList = c(extraList, newVal)
     }
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
@@ -161,7 +161,10 @@ function(input, output, session) {
     # colHash[input$dim] <- input$dim
     # updateSelectInput(session = session,inputId = "x_color",choices = vars)
     # updateSelectInput(session = session,inputId = "y_color",choices = vars)
-    
+  output$testOutput <- renderText({ 
+    table <- read.csv("asset_mapping.csv")
+    as.character(table[table$x == input$attr,]["X.1"]$X.1)
+  })  
   
   observe({
     print(input$attr)
@@ -199,7 +202,7 @@ function(input, output, session) {
   output$dimbuilder <- DT::renderDataTable({
     if(input$attr %in% modifiedName){
     print(input$attr)
-    inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
+      inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
     attrType <- typeFunc(input$attr)
     if(attrType == "non-numeric"){
@@ -215,7 +218,7 @@ function(input, output, session) {
     }
     else{
       tableText = paste0("data.table(asset) %>% gather(type, district, collector.block_number, ",input$attr,")
-        group_by( asset, district, collector.block_number) %>% summarize(true_count = ",input$func,"(as.numeric(",input$attr,")))")
+        group_by( asset, district, collector.block_number) %>% summarize(true_count = ",input$func,"(as.numeric(as.character(",input$attr,")),na.rm = TRUE))")
     }
     assign("tableTextGlobal", tableText, envir = .GlobalEnv)
     result = tryCatch({
@@ -272,13 +275,12 @@ function(input, output, session) {
     for(attr in vars) {
       dist[[as.character(attr)]] <- 0
     }
-    
-    
     for(i in 1:nrow(data.frame(dist))){
       result <- block()[block()$district == dist[i,]$District & block()$block == dist[i,]$Block,]
       if (nrow(result) > 0 ){
+        print(i)
         for(j in vars) {
-          dist[[as.character(j)]][i] <- result[[as.character(j)]]
+         dist[[as.character(j)]][i] <- result[[as.character(j)]] 
         }
       }
     }
@@ -392,7 +394,6 @@ function(input, output, session) {
       extraList = c(extraList, newVal)
     }
     temp <- sumData(joinTable,extraList = extraList)
-    browser()
     
     df <- temp %>% mutate()
     val <- strsplit(latestDim,"---")[[1]][1]

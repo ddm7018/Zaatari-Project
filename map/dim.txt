@@ -1,4 +1,4 @@
 sum(household.household_member) sum_household
-sum(as.numeric(education_skills.literate)) literate
-sum(as.numeric(education_skills.literate))/sum(household.household_member)*100 literacy_rate
+sum(as.numeric(as.character(education_skills.literate)),na.rm=TRUE)+sum(as.numeric(as.character(education_skills.literate_other)),na.rm=TRUE) literate
+sum(as.numeric(as.character(education_skills.literate)),na.rm=TRUE)+sum(as.numeric(as.character(education_skills.literate_other)),na.rm=TRUE)/sum(household.household_member)*100 literacy_rate
 mean(as.numeric(information.age_informant))  average_informat

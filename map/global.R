@@ -9,24 +9,13 @@ block <- readRDS("cap_data/block_summary.rds")
 dist  <- readOGR("boundaries/template_datasets/Zaatari_reference_datasets")
 dist  <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-modifiedName <- names(asset)
-modifiedName <- modifiedName[-which(modifiedName == "subscriberid")]
-modifiedName <- modifiedName[-which(modifiedName == "X_tags")]
-modifiedName <- modifiedName[-which(modifiedName == "X_notes")]
-modifiedName <- modifiedName[-which(modifiedName == "start")]
-modifiedName <- modifiedName[-which(modifiedName == "end")]
-modifiedName <- modifiedName[-which(modifiedName == "today")]
-modifiedName <- modifiedName[-which(modifiedName == "meta.instanceID")]
-modifiedName <- modifiedName[-which(modifiedName == "X_uuid")]
-modifiedName <- modifiedName[-which(modifiedName == "X_submission_time")]
+modifiedName = c()
+table <- read.csv("asset_map")
+for(ele in table$x){
+  modifiedName <- c(modifiedName,ele)
+}
 
 
-modifiedName[239] <-  modifiedName[1]
-modifiedName[240] <-  modifiedName[2]
-modifiedName <- modifiedName[-1]
-modifiedName <- modifiedName[-1]
-
-#asset[asset$education_skills.literate == "other"] = NA
 
 #move reading Dim to core.R
 colHash <- hash()
