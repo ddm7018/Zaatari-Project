@@ -306,17 +306,10 @@ function(input, output, session) {
     }  
     
     col.matrix <- colmat(nquantiles=4)
-    x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4, data = dist)
-    
-    #for(i in 1:length(x)){ 
-        #print(i)
-        #print(x[i])
-        #print(dist$Dim1[i])
-        #print(dist$Block[i])
-        #print(dist$District[i])
-        #cat("\n")
-        #}
-    #browser()
+    result <- tryCatch({
+          x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4, data = dist)},
+      error = function(e) { })
+   
     z <- unique(col.matrix)[x]
     z[is.na(z)] <- 0
     z[startsWith(z,"#")] <- .75
