@@ -8,6 +8,7 @@ library(rgdal)
 library(classInt)
 library(tidyr)
 library(shinyStore)
+library(stringi)
 source("core.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
