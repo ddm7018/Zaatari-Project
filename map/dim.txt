@@ -1,4 +1,4 @@
 sum(household.household_member) sum_household
-sum(literate) literate
+sum(work_business.employment=='yes')/length(work_business.employment) employment_rate
 sum(literate)/sum(household.household_member)*100 literacy_rate
 mean(as.numeric(information.age_informant))  average_informat

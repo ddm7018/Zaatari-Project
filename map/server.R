@@ -163,11 +163,17 @@ function(input, output, session) {
     # updateSelectInput(session = session,inputId = "y_color",choices = vars)
   output$testOutput <- renderText({ 
     table <- read.csv("asset-map.csv")
-    as.character(table[table$x == input$attr,]["X.1"]$X.1)
+    as.character(table[table$X == input$attr,]["X.1"]$X.1)
   })  
   
   observe({
     print(input$attr)
+    splitList <- strsplit(input$attr, "[.]")[[1]]
+    val2 <- paste0(splitList[length(splitList)],"_" ,input$func)
+    val2 <- stri_replace_all(val2,"_",fixed = ".")
+    val2 <- stri_replace_all(val2,"_",fixed = " ")
+    updateTextInput(session = session, inputId = "dim", value = val2 )
+    
     if(input$attr %in% modifiedName){
     choices <- eval(parse(text = paste0("levels(asset$",input$attr,")")))
     if(typeFunc(input$attr) == "non-numeric"){
@@ -178,7 +184,12 @@ function(input, output, session) {
     else{
       choices <- c("sum", "mean","sd")
     }
-    updateSelectInput(session = session, inputId = "func", choices = choices)
+    if(input$func == ""){
+      updateSelectInput(session = session, inputId = "func", choices = choices)
+      }
+    else{
+    updateSelectInput(session = session, inputId = "func", choices = choices, selected = input$func)
+    }
     }
     })
   
@@ -202,7 +213,7 @@ function(input, output, session) {
   output$dimbuilder <- DT::renderDataTable({
     if(input$attr %in% modifiedName){
     print(input$attr)
-      inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
+    inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
     attrType <- typeFunc(input$attr)
     if(attrType == "non-numeric"){
@@ -222,11 +233,12 @@ function(input, output, session) {
     }
     assign("tableTextGlobal", tableText, envir = .GlobalEnv)
     result = tryCatch({
-      eval(parse(text = tableText))
+      df <- eval(parse(text = tableText))
     }, error = function(e) {
       e
     })
-    
+    df <- df %>% mutate(true_count = round(true_count,3))
+    df
   }})
   
   output$contents <- DT::renderDataTable({
@@ -246,7 +258,7 @@ function(input, output, session) {
     )})
   
   output$scatter <- renderPlot({
-    xyplot(eval(parse(text=colHash[[input$x_input]])) ~eval(parse(text=colHash[[input$y_input]])), 
+    xyplot(eval(parse(text=colHash[[input$y_input]])) ~eval(parse(text=colHash[[input$x_input]])), 
            block(),
            xlab = input$x_input,
            ylab = input$y_input,
@@ -278,7 +290,6 @@ function(input, output, session) {
     for(i in 1:nrow(data.frame(dist))){
       result <- block()[block()$district == dist[i,]$District & block()$block == dist[i,]$Block,]
       if (nrow(result) > 0 ){
-        print(i)
         for(j in vars) {
          result1 <- tryCatch({dist[[as.character(j)]][i] <- result[[as.character(j)]]},
                   error = function(e){
@@ -339,8 +350,8 @@ function(input, output, session) {
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
       tags$h4("Total Literate Residents: ",findDistrict$literate),
-      tags$h4("Literacy Rate: ",round(findDistrict$literacy_rate,2)),
-      tags$h4("Average Age of Reported Information Source: ",round(findDistrict$average_informat,2))
+      tags$h4("Literacy Rate: ",format(round(findDistrict$literacy_rate,2),nsmall = 2)),
+      tags$h4("Average Age of Reported Information Source: ",format(round(findDistrict$average_informat,2),nsmall = 2))
     )
     
     for(ele in names(input$store)){ 
@@ -392,9 +403,20 @@ function(input, output, session) {
     }
     temp <- sumData(joinTable,extraList = extraList)
     
-    df <- temp %>% mutate()
+    df <- temp %>% mutate(average_informat = round(average_informat,2),literacy_rate = round(literacy_rate,2), long = round(long,4), lat = round(lat,4))
+    df <- df[,colSums(is.na(df))<nrow(df)]
+    round_df <- function(df, digits) {
+      nums <- vapply(df, is.numeric, FUN.VALUE = logical(1))
+      
+      df[,nums] <- round(df[,nums], digits = digits)
+      
+      (df)
+    }
+    df <- round_df(df, digits=3)
+    df <- df[,colSums(is.na(df))<nrow(df)]
     val <- strsplit(latestDim,"---")[[1]][1]
     action <- DT::dataTableAjax(session, df)
+    
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
   output$assetTable <- DT::renderDataTable({

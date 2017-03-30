@@ -1,166 +1,166 @@
-,x,
-3,household.household_member,How many members in the blocks?
-4,activities_hobbies_social.community_activity.tiger_girls,How many houses have family members of Tiger Girls?
-5,activities_hobbies_social.community_activity.children_club,How many houses have family members of Children’s Club?
-6,activities_hobbies_social.community_activity.elderly_club,How many houses have family members of Elderly Club?
-7,activities_hobbies_social.community_activity.women_club,How many houses have family members of Women’s Club?
-8,activities_hobbies_social.community_activity.youth_group,How many houses have family members of Youth Group?
-9,activities_hobbies_social.community_activity.other,How many houses have family members of Other Groups?
-11,activities_hobbies_social.hobbies.sewing,How many houses have family members whose hobbie is sewing?
-12,activities_hobbies_social.hobbies.painting,How many houses have family members whose hobbie is painting?
-13,activities_hobbies_social.hobbies.carving,How many houses have family members whose hobbie is carving?
-14,activities_hobbies_social.hobbies.cooking,How many houses have family members whose hobbie is cooking?
-15,activities_hobbies_social.hobbies.music,How many houses have family members whose hobbie is music?
-16,activities_hobbies_social.hobbies.singing,How many houses have family members whose hobbie is singing?
-17,activities_hobbies_social.hobbies.reading,How many houses have family members whose hobbie is reading?
-18,activities_hobbies_social.hobbies.poetry.writing,How many houses have family members whose hobbie is poetry writing?
-19,activities_hobbies_social.hobbies.football,How many houses have family members whose hobbie is football?
-20,activities_hobbies_social.hobbies.taekwondo,How many houses have family members whose hobbie is taekwondo?
-21,activities_hobbies_social.hobbies.handicraft,How many houses have family members whose hobbie is handicraft?
-22,activities_hobbies_social.hobbies.cards,How many houses have family members whose hobbie is cards?
-23,activities_hobbies_social.hobbies.calligraphy,How many houses have family members whose hobbie is calligraphy?
-24,activities_hobbies_social.hobbies.marbleBalls,How many houses have family members whose hobbie is marble balls?
-25,activities_hobbies_social.hobbies.other,How many houses have family members  have other hobbies?
-27,activities_hobbies_social.socialize_places.Safeway,How many houses have family members  socialize at Safeway?
-28,activities_hobbies_social.socialize_places.Tazweed,How many houses have family members  socialize at Tazweed?
-29,activities_hobbies_social.socialize_places.ringroad,How many houses have family members  socialize at Ring Road?
-30,activities_hobbies_social.socialize_places.water_tanks,How many houses have family members  socialize at Water Tanks?
-31,activities_hobbies_social.socialize_places.barbers,How many houses have family members  socialize at the barbers?
-32,activities_hobbies_social.socialize_places.basecamp_fence,How many houses have family members  socialize at Basecamp fence
-33,activities_hobbies_social.socialize_places.restaurant,How many houses have family members  socialize at restaurants?
-34,activities_hobbies_social.socialize_places.gym,How many houses have family members  socialize at the gym?
-35,activities_hobbies_social.socialize_places.Zaatari_entrance,How many houses have family members  socialize at Zaatari entrance?
-36,activities_hobbies_social.socialize_places.community_center,How many houses have family members  socialize at Community Center
-37,activities_hobbies_social.socialize_places.relative_home,How many houses have family members  socialize at relative’s home?
-38,activities_hobbies_social.socialize_places.neighbor_home,How many houses have family members  socialize at neighbor’s home?
-39,activities_hobbies_social.socialize_places.distribution_point,How many houses have family members  socialize at distribution point?
-40,activities_hobbies_social.socialize_places.registration_area,How many houses have family members  socialize at Registration Area?
-41,activities_hobbies_social.socialize_places.leave_permit_area,How many houses have family members  socialize at Leave Permit Area?
-42,activities_hobbies_social.socialize_places.service_units,How many houses have family members  socialize at Service Unit
-43,activities_hobbies_social.socialize_places.mosque,How many houses have family members  socialize at the mosque?
-44,activities_hobbies_social.socialize_places.souk,How many houses have family members  socialize at the souk?
-45,activities_hobbies_social.socialize_places.recreational,How many houses have family members  socialize at recreational places?
-46,activities_hobbies_social.socialize_places.other,How many houses have family members  socialize at other places?
-47,activities_hobbies_social.socialize_places_other,What are some other places houses have family members they social at?
-48,activities_hobbies_social.activities_yesno,How many houses have family members who organize social activities?
-49,activities_hobbies_social.supoort_activities.child_care,How many houses have family members who help organize activities for child care?
-50,activities_hobbies_social.supoort_activities.recreational_activity,How many houses have family members who help organize activities for child care?
-51,activities_hobbies_social.supoort_activities.reading_club,How many houses have family members who help organize activities for child care?
-52,activities_hobbies_social.supoort_activities.other,How many houses have family members who help organize activities for other?
-53,activities_hobbies_social.activity_other,What activities do family members help organize for(other)?
-54,activities_hobbies_social.activities_men,How many houses have family members who organize other activities that are preferred by men?
-55,activities_hobbies_social.activities_women,How many houses have family members who organize other activities that are preferred by women?
-56,activities_hobbies_social.activity_frequency,How often do family members organize other activities?
-57,activities_hobbies_social.volunteer_yesno,How many houses have family members that volunteer time?
-58,activities_hobbies_social.volunteer_ngo,What organization do family members volunteer for?
-59,education_skills.high_education,What is the highest level of education in the household?
-60,literate,How many family members are literate?
-62,education_skills.language.Arabic,How many houses have family members who speak Arabic?
-63,education_skills.language.English,How many houses have family members who speak English?
-64,education_skills.language.French,How many houses have family members who speak French?
-65,education_skills.language.other,How many houses have family members who speak other languages?
-66,education_skills.language_other,What other languages do they speak?
-67,education_skills.specialty.art,How many houses have education speciality is art?
-68,education_skills.specialty.biology,How many houses have education speciality in biology?
-69,education_skills.specialty.chemistry,How many houses have education speciality in chemistry?
-70,education_skills.specialty.computer,How many houses have education speciality in computer science?
-71,education_skills.specialty.engineering,How many houses have education speciality in engineering?
-72,education_skills.specialty.language,How many houses have education speciality in language and literature?
-73,education_skills.specialty.math,How many houses have education speciality in math?
-74,education_skills.specialty.medicine,How many houses have education speciality in medicine?
-75,education_skills.specialty.physics,How many houses have education speciality in physics?
-76,education_skills.specialty.nursing,How many houses have education speciality in nursing?
-77,education_skills.specialty.psychology,How many houses have education speciality in psychology?
-78,education_skills.specialty.sociology,How many houses have education speciality in sociology?
-79,education_skills.specialty.teaching,How many houses have education speciality in teaching?
-80,education_skills.specialty.other,How many houses have education speciality in other?
-81,education_skills.specialty_other,What other education speciality do family members have?
-82,education_skills.skills.tailor,How many houses have family members who have skill: tailor?
-83,education_skills.skills.barber,How many houses have family members who have skill: barber?
-84,education_skills.skills.stone,How many houses have family members who have skill: stone?
-85,education_skills.skills.electrician,How many houses have family members who have skill: electrician?
-86,education_skills.skills.dressmaker,How many houses have family members who have skill: dressmaker?
-87,education_skills.skills.craftsmen,How many houses have family members who have skill: craftsmen?
-88,education_skills.skills.farmer,How many houses have family members who have skill: farmer?
-89,education_skills.skills.butcher,How many houses have family members who have skill: butcher?
-90,education_skills.skills.baker,How many houses have family members who have skill: baker?
-91,education_skills.skills.athletes,How many houses have family members who have skill: athlete?
-92,education_skills.skills.pr,How many houses have family members who have skill: PR?
-93,education_skills.skills.computer,How many houses have family members who have skill: computer?
-94,education_skills.skills.construction,How many houses have family members who have skill: construction?
-95,education_skills.skills.musician,How many houses have family members who have skill: musican?
-96,education_skills.skills.other,How many houses have family members who have skill: other?
-97,education_skills.skills_other,What other skills do they have?
-98,work_business.hire.tailor,How many houses have family member who be good enough for hire for the skill: tailor?
-99,work_business.hire.barber,How many houses have family member who be good enough for hire for the skill: tailor?
-100,work_business.hire.stone,How many houses have family member who be good enough for hire for the skill: tailor?
-101,work_business.hire.electrician,How many houses have family member who be good enough for hire for the skill: tailor?
-102,work_business.hire.dressmaker,How many houses have family member who be good enough for hire for the skill: tailor?
-103,work_business.hire.craftsmen,How many houses have family member who be good enough for hire for the skill: tailor?
-104,work_business.hire.farmer,How many houses have family member who be good enough for hire for the skill: tailor?
-105,work_business.hire.butcher,How many houses have family member who be good enough for hire for the skill: tailor?
-106,work_business.hire.baker,How many houses have family member who be good enough for hire for the skill: tailor?
-107,work_business.hire.athletes,How many houses have family member who be good enough for hire for the skill: tailor?
-108,work_business.hire.pr,How many houses have family member who be good enough for hire for the skill: tailor?
-109,work_business.hire.computer,How many houses have family member who be good enough for hire for the skill: tailor?
-110,work_business.hire.construction,How many houses have family member who be good enough for hire for the skill: tailor?
-111,work_business.hire.musician,How many houses have family member who be good enough for hire for the skill: tailor?
-112,work_business.hire.doctor,How many houses have family member who be good enough for hire for the skill: tailor?
-113,work_business.hire.nurse,How many houses have family member who be good enough for hire for the skill: tailor?
-114,work_business.hire.other,How many houses have family member who be good enough for hire for the skill: others?
-115,work_business.hire_other,What others skills would family members be good enough for hire?
-116,work_business.employment,How many houses have someone in the family employed?
-117,work_business.plan_business.tailor,How many houses think having the skill (tailor) would allow you to start a business?
-118,work_business.plan_business.barber,How many houses think having the skill (tailor) would allow you to start a business?
-119,work_business.plan_business.stone,How many houses think having the skill (tailor) would allow you to start a business?
-120,work_business.plan_business.electrician,How many houses think having the skill (tailor) would allow you to start a business?
-121,work_business.plan_business.dressmaker,How many houses think having the skill (tailor) would allow you to start a business?
-122,work_business.plan_business.craftsmen,How many houses think having the skill (tailor) would allow you to start a business?
-123,work_business.plan_business.farmer,How many houses think having the skill (tailor) would allow you to start a business?
-124,work_business.plan_business.butcher,How many houses think having the skill (tailor) would allow you to start a business?
-125,work_business.plan_business.baker,How many houses think having the skill (tailor) would allow you to start a business?
-126,work_business.plan_business.athletes,How many houses think having the skill (tailor) would allow you to start a business?
-127,work_business.plan_business.pr,How many houses think having the skill (tailor) would allow you to start a business?
-128,work_business.plan_business.computer,How many houses think having the skill (tailor) would allow you to start a business?
-129,work_business.plan_business.construction,How many houses think having the skill (tailor) would allow you to start a business?
-130,work_business.plan_business.musician,How many houses think having the skill (tailor) would allow you to start a business?
-131,work_business.plan_business.doctor,How many houses think having the skill (tailor) would allow you to start a business?
-132,work_business.plan_business.nurse,How many houses think having the skill (tailor) would allow you to start a business?
-133,work_business.plan_business.other,How many houses think having the skill (other) would allow you to start a business?
-134,work_business.skill_business_other,What other skills would allow you to start a business?
-135,information.find_information,Who is the best person for finding information?
-137,information.age_informant,What is the age of the best person for finding information?
-138,information.find_information2,Who is the second best person at finding new information?
-140,information.age_informant2,What is the age of the second best person at finding new information?
-141,information.urban_info,How many houses get updates and information from urban areas?
-142,information.urban_info_reliable,How many houses get reliable updates and information from urban areas??
-143,information.information_places.Safeway,How many houses get important information at Safeway?
-144,information.information_places.Tazweed,How many houses get important information at Tazweed?
-145,information.information_places.ringroad,How many houses get important information at Safeway?
-146,information.information_places.water_tanks,How many houses get important information at water tanks?
-147,information.information_places.barbers,How many houses get important information at the barbers?
-148,information.information_places.basecamp_fence,How many houses get important information at the basecamp fence?
-149,information.information_places.restaurant,How many houses get important information at the restautrant?
-150,information.information_places.gym,How many houses get important information at the gym?
-151,information.information_places.Zaatari_entrance,How many houses get important information at the Zaatari entrance?
-152,information.information_places.community_center,How many houses get important information at the community center?
-153,information.information_places.relative_home,How many houses get important information at a relative’s home?
-154,information.information_places.neighbor_home,How many houses get important information at a neighbor’s home?
-155,information.information_places.distribution_point,How many houses get important information at the distribution point?
-156,information.information_places.registration_area,How many houses get important information at the registration area?
-157,information.information_places.leave_permit_area,How many houses get important information at the leave permit area?
-158,information.information_places.service_units,How many houses get important information at the service units?
-159,information.information_places.mosque,How many houses get important information at the mosques?
-160,information.information_places.souk,How many houses get important information at the souk?
-161,information.information_places.recreational,How many houses get important information at recreational places?
-162,information.information_places.other,How many houses get important information at the other places?
-164,information.phone_yesno,How many houses have a phone?
-165,information.internet_access.community_center,How many houses access internet at community center?
-166,information.internet_access.base,How many houses access internet at base?
-167,information.internet_access.phone,How many houses access on mobile phone?
-168,information.internet_access.other_phone,How many houses access on other’s mobile phone
-169,information.internet_access.not_use,How many houses do not use the internet?
-170,information.internet_access.other,How many houses access internet at other location?
-172,time.spare_time,How much spare time do you have?
-173,time.interest_offer_time,How interested are you in offering spare time?
-174,general.more_asset,Assets You can share or train others?
+Table 1,,,, 
+3,household.household_member,How many members in the blocks?,,
+4,activities_hobbies_social.community_activity.tiger_girls,How many houses have family members who are Tiger Girls?,,
+5,activities_hobbies_social.community_activity.children_club,How many houses have family members involved with a Children’s Club?,,
+6,activities_hobbies_social.community_activity.elderly_club,How many houses have family members involved with an Elderly Club?,,
+7,activities_hobbies_social.community_activity.women_club,How many houses have family members  involved with a Women’s Club?,,
+8,activities_hobbies_social.community_activity.youth_group,How many houses have family members involved with a Youth Group?,,
+9,activities_hobbies_social.community_activity.other,How many houses have family members involved with other groups?,,
+11,activities_hobbies_social.hobbies.sewing,How many houses have family members whose hobby is sewing?,,
+12,activities_hobbies_social.hobbies.painting,How many houses have family members whose hobby is painting?,,
+13,activities_hobbies_social.hobbies.carving,How many houses have family members whose hobby is carving?,,
+14,activities_hobbies_social.hobbies.cooking,How many houses have family members whose hobby is cooking?,,
+15,activities_hobbies_social.hobbies.music,How many houses have family members whose hobby is music?,,
+16,activities_hobbies_social.hobbies.singing,How many houses have family members whose hobby is singing?,,
+17,activities_hobbies_social.hobbies.reading,How many houses have family members whose hobby is reading?,,
+18,activities_hobbies_social.hobbies.poetry.writing,How many houses have family members whose hobby is poetry writing?,,
+19,activities_hobbies_social.hobbies.football,How many houses have family members whose hobby is football?,,
+20,activities_hobbies_social.hobbies.taekwondo,How many houses have family members whose hobby is taekwondo?,,
+21,activities_hobbies_social.hobbies.handicraft,How many houses have family members whose hobby involves handicrafts?,,
+22,activities_hobbies_social.hobbies.cards,How many houses have family members whose hobby involves playing cards?,,
+23,activities_hobbies_social.hobbies.calligraphy,How many houses have family members whose hobby is calligraphy?,,
+24,activities_hobbies_social.hobbies.marbleBalls,How many houses have family members whose hobby invloves playing with marble balls?,,
+25,activities_hobbies_social.hobbies.other,How many houses have family members have other hobbies?,,
+27,activities_hobbies_social.socialize_places.Safeway,How many houses have family members who socialize at Safeway?,,
+28,activities_hobbies_social.socialize_places.Tazweed,How many houses have family members who socialize at Tazweed?,,
+29,activities_hobbies_social.socialize_places.ringroad,How many houses have family members who socialize at the Ring Road?,,
+30,activities_hobbies_social.socialize_places.water_tanks,How many houses have family members who socialize at water tanks?,,
+31,activities_hobbies_social.socialize_places.barbers,How many houses have family members who socialize at the barber shop?,,
+32,activities_hobbies_social.socialize_places.basecamp_fence,How many houses have family members who socialize at the basecamp fence?,,
+33,activities_hobbies_social.socialize_places.restaurant,How many houses have family members who socialize at restaurants?,,
+34,activities_hobbies_social.socialize_places.gym,How many houses have family members who socialize at the gym?,,
+35,activities_hobbies_social.socialize_places.Zaatari_entrance,How many houses have family members who socialize at  the Zaatari entrance?,,
+36,activities_hobbies_social.socialize_places.community_center,How many houses have family members who socialize at a community center?,,
+37,activities_hobbies_social.socialize_places.relative_home,How many houses have family members who socialize at a relative’s home?,,
+38,activities_hobbies_social.socialize_places.neighbor_home,How many houses have family members who socialize at a neighbor’s home?,,
+39,activities_hobbies_social.socialize_places.distribution_point,How many houses have family members who socialize at a distribution point?,,
+40,activities_hobbies_social.socialize_places.registration_area,How many houses have family members who socialize at a registration area?,,
+41,activities_hobbies_social.socialize_places.leave_permit_area,How many houses have family members who socialize at a leave permit area?,,
+42,activities_hobbies_social.socialize_places.service_units,How many houses have family members who socialize at a service unit?,,
+43,activities_hobbies_social.socialize_places.mosque,How many houses have family members whosocialize at a mosque?,,
+44,activities_hobbies_social.socialize_places.souk,How many houses have family members who socialize at the souk?,,
+45,activities_hobbies_social.socialize_places.recreational,How many houses have family members who socialize at recreational places?,,
+46,activities_hobbies_social.socialize_places.other,How many houses have family members who socialize at other places?,,
+47,activities_hobbies_social.socialize_places_other,What are some other places where family members socialize?,,
+48,activities_hobbies_social.activities_yesno,How many houses have family members who organize social activities?,,
+49,activities_hobbies_social.supoort_activities.child_care,How many houses have family members who help organize activities for child care?,,
+50,activities_hobbies_social.supoort_activities.recreational_activity,How many houses have family members who help organize recreational activities?,,
+51,activities_hobbies_social.supoort_activities.reading_club,How many houses have family members who help organize activities for child care?,,
+52,activities_hobbies_social.supoort_activities.other,How many houses have family members who help organize other activities?,,
+53,activities_hobbies_social.activity_other,What other hobby related activities do family members help organize?,,
+54,activities_hobbies_social.activities_men,How many houses have family members who organize activities that are preferred by men?,,
+55,activities_hobbies_social.activities_women,How many houses have family members who organize activities that are preferred by women?,,
+56,activities_hobbies_social.activity_frequency,How often do family members organize other activities?,,
+57,activities_hobbies_social.volunteer_yesno,How many houses have family members that volunteer time?,,
+58,activities_hobbies_social.volunteer_ngo,What organization do family members volunteer for?,,
+59,education_skills.high_education,What is the highest level of education in the household?,,
+60,literate,How many family members are literate?,,
+62,education_skills.language.Arabic,How many houses have family members who speak Arabic?,,
+63,education_skills.language.English,How many houses have family members who speak English?,,
+64,education_skills.language.French,How many houses have family members who speak French?,,
+65,education_skills.language.other,How many houses have family members who speak other languages?,,
+66,education_skills.language_other,What other languages do they speak?,,
+67,education_skills.specialty.art,How many houses have members with specialized education in art?,,
+68,education_skills.specialty.biology,How many houses have members with specialized educationin biology?,,
+69,education_skills.specialty.chemistry,How many houses have members with specialized education in chemistry?,,
+70,education_skills.specialty.computer,How many houses have members with specialized education in computer science?,,
+71,education_skills.specialty.engineering,How many houses have members with specialized education in engineering?,,
+72,education_skills.specialty.language,How many houses have members with specialized education in language and literature?,,
+73,education_skills.specialty.math,How many houses have members with specialized education in math?,,
+74,education_skills.specialty.medicine,How many houses have members with specialized education in medicine?,,
+75,education_skills.specialty.physics,How many houses have members with specialized education in physics?,,
+76,education_skills.specialty.nursing,How many houses have members with specialized education in nursing?,,
+77,education_skills.specialty.psychology,How many houses have members with specialized education in psychology?,,
+78,education_skills.specialty.sociology,How many houses have members with specialized education in sociology?,,
+79,education_skills.specialty.teaching,How many houses have members with specialized education in teaching?,,
+80,education_skills.specialty.other,How many houses have members with specialized education in other fields?,,
+81,education_skills.specialty_other,What other specialized educations do family members have?,,
+82,education_skills.skills.tailor,How many houses have family members who are skilled as a tailor?,,
+83,education_skills.skills.barber,How many houses have family members who are skilled as a barber?,,
+84,education_skills.skills.stone,How many houses have family members who are skilled as a stoneworker?,,
+85,education_skills.skills.electrician,How many houses have family members who are skilled as an electrician?,,
+86,education_skills.skills.dressmaker,How many houses have family members who are skilled as a dressmaker?,,
+87,education_skills.skills.craftsmen,How many houses have family members who are skilled as a craftsmen?,,
+88,education_skills.skills.farmer,How many houses have family members who are skilled as a farmer?,,
+89,education_skills.skills.butcher,How many houses have family members who are skilled as a butcher?,,
+90,education_skills.skills.baker,How many houses have family members who are skilled as a baker?,,
+91,education_skills.skills.athletes,How many houses have family members who have athletic skills?,,
+92,education_skills.skills.pr,How many houses have family members who have public relations skills?,,
+93,education_skills.skills.computer,How many houses have family members who have computer skills?,,
+94,education_skills.skills.construction,How many houses have family members who have construction skills?,,
+95,education_skills.skills.musician,How many houses have family members who have musical skills?,,
+96,education_skills.skills.other,How many houses have family members who have other skills?,,
+97,education_skills.skills_other,What other skills do they have?,,
+98,work_business.hire.tailor,How many houses have a family member who could work as a tailor?,,
+99,work_business.hire.barber,How many houses have a family member who could work as a barber?,,
+100,work_business.hire.stone,How many houses have a family member who could work as a stoneworker?,,
+101,work_business.hire.electrician,How many houses have a family member who could work as an electrician?,,
+102,work_business.hire.dressmaker,How many houses have a family member who could work as a dressmaker?,,
+103,work_business.hire.craftsmen,How many houses have a family member who could work as a craftsmen?,,
+104,work_business.hire.farmer,How many houses have a family member who could work as a farmer?,,
+105,work_business.hire.butcher,How many houses have a family member who could work as a butcher?,,
+106,work_business.hire.baker,How many houses have a family member who could work as a baker?,,
+107,work_business.hire.athletes,How many houses have a family member who could work as an athlete?,,
+108,work_business.hire.pr,How many houses have a family member who could work in public relations?,,
+109,work_business.hire.computer,How many houses have a family member who could work with computers?,,
+110,work_business.hire.construction,How many houses have a family member who could work in construction?,,
+111,work_business.hire.musician,How many houses have a family member who could work as a musician?,,
+112,work_business.hire.doctor,How many houses have a family member who could work as a doctor?,,
+113,work_business.hire.nurse,How many houses have a family member who could work as a nurse?,,
+114,work_business.hire.other,How many houses have a family member who could work in other jobs?,,
+115,work_business.hire_other,What others skills would enable family members to find work?,,
+116,work_business.employment,How many houses have someone in the family employed?,,
+117,work_business.plan_business.tailor,How many houses think having the skill (tailor) would enable you to start a business?,,
+118,work_business.plan_business.barber,How many houses think having the skill (barber) would enable you to start a business?,,
+119,work_business.plan_business.stone,How many houses think having the skill (stoneworker) would enable you to start a business?,,
+120,work_business.plan_business.electrician,How many houses think having the skill (electrician) would enable you to start a business?,,
+121,work_business.plan_business.dressmaker,How many houses think having the skill (dressmaker) would enable you to start a business?,,
+122,work_business.plan_business.craftsmen,How many houses think having the skill (craftsmen) would enable to start a business?,,
+123,work_business.plan_business.farmer,How many houses think having the skill (farmer) would enable you to start a business?,,
+124,work_business.plan_business.butcher,How many houses think having the skill (buthcer) would enable you to start a business?,,
+125,work_business.plan_business.baker,How many houses think having the skill (baker) would enable you to start a business?,,
+126,work_business.plan_business.athletes,How many houses think having the skill (athletics) would enable you to start a business?,,
+127,work_business.plan_business.pr,How many houses think having the skill (public relations) would enable you to start a business?,,
+128,work_business.plan_business.computer,How many houses think having the skill (computers) would enable you to start a business?,,
+129,work_business.plan_business.construction,How many houses think having the skill (construction) would enable you to start a business?,,
+130,work_business.plan_business.musician,How many houses think having the skill (musician) would enable you to start a business?,,
+131,work_business.plan_business.doctor,How many houses think having the skill (doctor) would enable you to start a business?,,
+132,work_business.plan_business.nurse,How many houses think having the skill (nurse) would enable  you to start a business?,,
+133,work_business.plan_business.other,How many houses think having the other skills would enable you to start a business?,,
+134,work_business.skill_business_other,What other skills would enable you to start a business?,,
+135,information.find_information,Who is the best person in the house at finding new information?,,
+137,information.age_informant,What is the age of the best person in the house at finding new information?,,
+138,information.find_information2,Who is the second  best person in the house at finding new information?,,
+140,information.age_informant2,What is the age of the second best person in the house at finding new information?,,
+141,information.urban_info,How many houses get updates and information from urban areas?,,
+142,information.urban_info_reliable,How many houses get reliable updates and information from urban areas??,,
+143,information.information_places.Safeway,How many houses get important information at Safeway?,,
+144,information.information_places.Tazweed,How many houses get important information at Tazweed?,,
+145,information.information_places.ringroad,How many houses get important information at the Ring Road?,,
+146,information.information_places.water_tanks,How many houses get important information at the water tanks?,,
+147,information.information_places.barbers,How many houses get important information at the barber shop?,,
+148,information.information_places.basecamp_fence,How many houses get important information at the basecamp fence?,,
+149,information.information_places.restaurant,How many houses get important information at a restautrant?,,
+150,information.information_places.gym,How many houses get important information at the gym?,,
+151,information.information_places.Zaatari_entrance,How many houses get important information at the Zaatari entrance?,,
+152,information.information_places.community_center,How many houses get important information at the community center?,,
+153,information.information_places.relative_home,How many houses get important information at a relative’s home?,,
+154,information.information_places.neighbor_home,How many houses get important information at a neighbor’s home?,,
+155,information.information_places.distribution_point,How many houses get important information at the distribution point?,,
+156,information.information_places.registration_area,How many houses get important information at the registration area?,,
+157,information.information_places.leave_permit_area,How many houses get important information at the leave permit area?,,
+158,information.information_places.service_units,How many houses get important information at the service units?,,
+159,information.information_places.mosque,How many houses get important information at the mosques?,,
+160,information.information_places.souk,How many houses get important information at the souk?,,
+161,information.information_places.recreational,How many houses get important information at recreational places?,,
+162,information.information_places.other,How many houses get important information at the other places?,,
+164,information.phone_yesno,How many houses have a phone?,,
+165,information.internet_access.community_center,How many houses have internet access at a community center?,,
+166,information.internet_access.base,How many houses access the internet at base?,,
+167,information.internet_access.phone,How many houses access the internet on a mobile phone?,,
+168,information.internet_access.other_phone,How many houses access the internet on another’s mobile phone?,,
+169,information.internet_access.not_use,How many houses do not use the internet?,,
+170,information.internet_access.other,How many houses access the internet at another location?,,
+172,time.spare_time,How much spare time do you have?,,
+173,time.interest_offer_time,How interested are you in offering your spare time?,,
+174,general.more_asset,What assets can you share or use to train others?,,

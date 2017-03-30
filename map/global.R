@@ -11,7 +11,7 @@ dist  <- spTransform(dist, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs
 
 modifiedName = c()
 table <- read.csv("asset-map.csv")
-for(ele in table$x){
+for(ele in table$X){
   modifiedName <- c(modifiedName,ele)
 }
 

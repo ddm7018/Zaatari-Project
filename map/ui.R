@@ -23,7 +23,7 @@ navbarPage("Zaatari", id="nav",
         width = 330, height = "auto",
         h2("Explorer"),
         selectInput("x_color", "X Color", vars, selected = "sum_household"),
-        selectInput("y_color", "Y Color", vars, selected = "literate"),
+        selectInput("y_color", "Y Color", vars, selected = "employment_rate"),
         plotOutput("legend_color")
       ),
       tags$div(id="cite",'Daniel Mooney - RIT IST Capstone'))
