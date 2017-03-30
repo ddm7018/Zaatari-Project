@@ -350,7 +350,7 @@ function(input, output, session) {
     popupTagList <- tagList(
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
-      tags$h4("Total Literate Residents: ",findDistrict$literate),
+      tags$h4("Employment Rate: ",findDistrict$employment_rate),
       tags$h4("Literacy Rate: ",format(round(findDistrict$literacy_rate,2),nsmall = 2)),
       tags$h4("Average Age of Reported Information Source: ",format(round(findDistrict$average_informat,2),nsmall = 2))
     )
