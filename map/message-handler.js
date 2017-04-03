@@ -34,7 +34,7 @@ element.addEventListener("click", function(e) {
   }
   
   else{
-    alert("Adding Dimension " + addDimVal + "\nAfter 3 seconds, application will back to Interactive Map");
+    alert("Adding Dimension " + addDimVal + "\nAfter 3 seconds, application will reload");
     waitSeconds(3000);
     $("nav")[0].children[0].children[1].children[0].children[0].click();
   }}, false);
