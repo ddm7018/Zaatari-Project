@@ -36,7 +36,7 @@ element.addEventListener("click", function(e) {
   else{
     alert("Adding Dimension " + addDimVal);
     waitSeconds(3000);
-    location.reload(); 
+    $("nav")[0].children[0].children[1].children[0].children[0].click();
   }}, false);
   
 var element = document.getElementById("dltFunc");
@@ -55,7 +55,7 @@ element.addEventListener("click", function(e) {
   }
   if(anyToDelete){
   waitSeconds(3000);
-  location.reload();
+  $("nav")[0].children[0].children[1].children[0].children[0].click();
   }
   else{
     alert("Nothing to delete");
