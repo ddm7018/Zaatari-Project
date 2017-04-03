@@ -55,7 +55,7 @@ element.addEventListener("click", function(e) {
   }
   if(anyToDelete){
   waitSeconds(3000);
-  $("nav")[0].children[0].children[1].children[0].children[0].click();
+  location.reload();
   }
   else{
     alert("Nothing to delete");
