@@ -29,4 +29,7 @@ http://rit-capstone.ddns.net/Zaatari-Project/map/
 4) Unpack
 5) Download Shape Files from https://drive.google.com/file/d/0B_dPfSwYMdclaFE5aFpmZGd2MFU/view?usp=sharing
 6) Unpack Shape Files Zip into map folder and rename as boundaries
-7) Run the R command shiny::runApp('Zaatari-Project/map')
+7) Run the R command 
+```r
+shiny::runApp('Zaatari-Project/map')
+```
