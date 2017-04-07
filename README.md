@@ -3,8 +3,7 @@
 Geovizualization, and its capacity  to provide tools for visual spatial  analysis, has wide ranging domain applications to support sense and decision making including addressing complex problem in humanitarian crisis management.   The need for such tools is manifest in the Middle East in light of the civil war in Syria and ensuing mass migration of millions of Syrian refugees to neighboring countries.  Zaatari, home to 80,000 refugees in Jordan, provides for basic needs and seeks to enhance its social infrastructure.  The Zaatari camp, organized in districts and further divided into blocks, offers the opportunity to develop a geovisualization tool to analyze  patterns and relationships  on a block level relating to employment skills, sources of information, and education and literacy rates to support decision making. While there has been extensive analysis at the district level, there is no current application at the block level. This project is a “Shiny” geovisualization tool incorporating block-level analysis of key social attributes combining block-level asset survey data and OpenStreetMap.
 
 ## Technology
-The geovisualization application was built using Shiny (R's web framework)
-The application also uses an Leaflet(to render the interactive maps) and shinyStore (an experimental library to save extra dimensions using HTML5 localStorage), along with a variety of other traditional R packages.
+The geovisualization application was built using Shiny (R's web framework). The application also uses an Leaflet(to render the interactive maps) and shinyStore (an experimental library to save extra dimensions using HTML5 localStorage), along with a variety of other traditional R packages.
 
 ## Dimensions:
  The application has four preloaded dimensions which can be analyzed in Interactive Map and Chart Tabs
