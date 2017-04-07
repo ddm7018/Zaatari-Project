@@ -12,7 +12,7 @@ The geovisualization application was built using Shiny (R's web framework). The 
   3) literacy_rate - total number of literate people in a block divided by the total number of people in a block
   4) average _informant - which represents the average age of the best person to get information from in each block
 
-# Dimension Builder
+## Dimension Builder
 The application also allows for adding ten extra dimension using the Dimension Builder. This tab allows users to view different attributes of the data and add up to 10 of them to application. Whenever a user add the dimensions they are aviable, in the Interactive Maps and Charts.
 
 ## Tutorial Link
