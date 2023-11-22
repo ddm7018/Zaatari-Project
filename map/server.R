@@ -4,11 +4,12 @@ library(scales)
 library(lattice)
 library(dplyr)
 library(hash)
-library(rgdal)
+#library(rgdal)
 library(classInt)
 library(tidyr)
 library(shinyStore)
 library(stringi)
+library(sp)
 source("core.R")
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
@@ -35,9 +36,11 @@ colmat.print <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorVal
   my.pal.1   <- findColours(my.class,c(upperleft,bottomleft))
   my.pal.2   <- findColours(my.class,c(upperright, bottomright))
   col.matrix <- matrix(nrow = 101, ncol = 101, NA)
+  print(my.pal.1[i])
   for(i in 1:101){
     my.col <- c(paste(my.pal.1[i]),paste(my.pal.2[i]))
-    col.matrix[102-i,] <- findColours(my.class,my.col)}
+    col.matrix[102-i,] <- findColours(my.class,my.col)
+    }
   plot(c(1,1),pch = 19,col = my.pal.1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xlab, ylab = ylab,cex.lab = 1.3)
   for(i in 1:101){
     col.temp <- col.matrix[i-1,]
@@ -135,6 +138,8 @@ function(input, output, session) {
       newVal <- paste0(ele,"---",eval(parse(text=paste0("input$store$",ele))))
       extraList = c(extraList, newVal)
     }
+    
+    print(storeNames)
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
 
@@ -326,14 +331,19 @@ function(input, output, session) {
     z[is.na(z)] <- 0
     z[startsWith(z,"#")] <- .75
 
-    leafletProxy("map", data = dist) %>% clearShapes() %>%
+    #print(z)
+    #print(unique(col.matrix)[x])
+    
+    leafletProxy("map", data = st_zm(dist)) %>% clearShapes() %>%
       addPolygons(color = "#444444", weight = 0.01, smoothFactor = 1.0,
                   opacity = .75, fillOpacity = z,
                   fillColor=unique(col.matrix)[x]
                   #highlightOptions = highlightOptions(weight = 1,
                   #                                    color = "white",
                   #                                    bringToFront = TRUE)
+    
       )
+    
   })
   
   # # Show a popup at the given location
@@ -344,9 +354,13 @@ function(input, output, session) {
     coords <- as.data.frame(cbind(lng, lat))
     point <- SpatialPoints(coords)
     proj4string(point) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+    point <- st_as_sf(point, coords = c('y', 'x'), crs = st_crs(map))
     findDistrictinDist <- dist[point,]
+    
+  
     findDistrict <- block()[block()$block == findDistrictinDist$Block &  block()$district == findDistrictinDist$District,]
-
+    
+    print(findDistrict)
     popupTagList <- tagList(
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),

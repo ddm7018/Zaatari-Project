@@ -1,5 +1,5 @@
 library(leaflet)
-library(rgdal)
+#library(rgdal)
 library(shinydashboard)
 library(shiny)
 library(shinyStore)
