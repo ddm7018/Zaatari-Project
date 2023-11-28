@@ -16,7 +16,8 @@ source("core.R")
 set.seed(100)
 
 
-
+# Function `typeFunc` is used to determine and return the type of the input element.
+# It takes a variable `ele` and evaluates it in the context of asset levels.
 typeFunc <- function(ele){
   t <- eval(parse(text=paste0("levels(asset$",ele,")")))
   if(typeof(t) == 'NULL'){
@@ -30,103 +31,182 @@ typeFunc <- function(ele){
   }
 }
 
-colmat.print <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorValue = 255), upperright = rgb(130,0,80, maxColorValue = 255), bottomleft="grey", bottomright = rgb(255,230,15, maxColorValue = 255), xlab = "x label", ylab = "y label"){
-  my.data    <- seq(0,1,.01)
-  my.class   <- classIntervals(my.data,n=nquantiles,style="quantile")
-  my.pal.1   <- findColours(my.class,c(upperleft,bottomleft))
-  my.pal.2   <- findColours(my.class,c(upperright, bottomright))
-  col.matrix <- matrix(nrow = 101, ncol = 101, NA)
-  print(my.pal.1[i])
+# The function colmat.print generates a color matrix for use in creating plots.
+# It takes the following parameters:
+# - nquantiles: the number of quantiles to use when classifying the data.
+# - upperleft: the color to use for the upper left portion of the plot.
+# - upperright: the color to use for the upper right portion of the plot.
+colmat.print <- function(numQuantiles = 10, upperLeftColor = rgb(0,150,235, maxColorValue = 255), upperRightColor = rgb(130,0,80, maxColorValue = 255), bottomLeftColor="grey", bottomRightColor = rgb(255,230,15, maxColorValue = 255), xLabel = "x label", yLabel = "y label"){
+  dataSeq    <- seq(0,1,.01)
+  classInterval   <- classIntervals(dataSeq,n=numQuantiles,style="quantile")
+  palette1   <- findColours(classInterval,c(upperLeftColor,bottomLeftColor))
+  palette2   <- findColours(classInterval,c(upperRightColor, bottomRightColor))
+  colorMatrix <- matrix(nrow = 101, ncol = 101, NA)
+  #print(palette1[i])
   for(i in 1:101){
-    my.col <- c(paste(my.pal.1[i]),paste(my.pal.2[i]))
-    col.matrix[102-i,] <- findColours(my.class,my.col)
-    }
-  plot(c(1,1),pch = 19,col = my.pal.1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xlab, ylab = ylab,cex.lab = 1.3)
-  for(i in 1:101){
-    col.temp <- col.matrix[i-1,]
-    points(my.data,rep((i-1)/100,101),pch=15,col = col.temp, cex = 1)
+    currentColor <- c(paste(palette1[i]),paste(palette2[i]))
+    colorMatrix[102-i,] <- findColours(classInterval,currentColor)
   }
-  seqs       <- seq(0,100,(100/nquantiles))
-  seqs[1]    <- 1
-  col.matrix <- col.matrix[c(seqs), c(seqs)]
+  plot(c(1,1),pch = 19,col = palette1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xLabel, ylab = yLabel,cex.lab = 1.3)
+  for(i in 1:101){
+    tempColor <- colorMatrix[i-1,]
+    points(dataSeq,rep((i-1)/100,101),pch=15,col = tempColor, cex = 1)
+  }
+  sequences       <- seq(0,100,(100/numQuantiles))
+  sequences[1]    <- 1
+  colorMatrix <- colorMatrix[c(sequences), c(sequences)]
 }
 
-colmat <- function(nquantiles = 10, upperleft = rgb(0,150,235, maxColorValue = 255), upperright = rgb(130,0,80, maxColorValue = 255), bottomleft="grey", bottomright = rgb(255,230,15, maxColorValue = 255), xlab = "x label", ylab = "y label"){
-  my.data    <- seq(0,1,.01)
-  my.class   <- classIntervals(my.data,n=nquantiles,style="quantile")
-  my.pal.1   <- findColours(my.class,c(upperleft,bottomleft))
-  my.pal.2   <- findColours(my.class,c(upperright, bottomright))
-  col.matrix <- matrix(nrow = 101, ncol = 101, NA)
-  for(i in 1:101){
-    my.col <- c(paste(my.pal.1[i]),paste(my.pal.2[i]))
-    col.matrix[102-i,] <- findColours(my.class,my.col)}
-  #plot(c(1,1),pch = 19,col = my.pal.1, cex = 0.5,xlim = c(0,1),ylim = c(0,1),frame.plot = F, xlab = xlab, ylab = ylab,cex.lab = 1.3)
-  for(i in 1:101){
-    col.temp <- col.matrix[i-1,]
-    #points(my.data,rep((i-1)/100,101),pch=15,col = col.temp, cex = 1)
-  }
-  seqs       <- seq(0,100,(100/nquantiles))
-  seqs[1]    <- 1
-  col.matrix <- col.matrix[c(seqs), c(seqs)]
-}
-
-bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4, data){
+# The colmat function generates a color matrix for use in creating plots.
+# It takes the following parameters:
+# - nquantiles: the number of quantiles to use when classifying the data.
+# - upperleft: the color to use for the upper left portion of the plot.
+# - upperright: the color to use for the upper right portion of the plot.
+# - bottomleft: the color to use for the bottom left portion of the plot.
+# - bottomright: the color to use for the bottom right portion of the plot.
+# - xlab: label for the x-axis
+# - ylab: label for the y-axis
+colmat <- function(numQuantiles = 10,
+                                upperLeftColor = rgb(0,150,235, maxColorValue = 255),
+                                upperRightColor = rgb(130,0,80, maxColorValue = 255), 
+                                bottomLeftColor="grey", 
+                                bottomRightColor = rgb(255,230,15, maxColorValue = 255), 
+                                xLabel = "x label", 
+                                yLabel = "y label"){
   
-  quanmean<-rasterx
-  for(ele in 1:length(data$sum_household)){
-    if(data$sum_household[ele] == 0 & quanmean[ele] == 0){
-      quanmean[ele] <- NA
+  dataSequence <- seq(0, 1, .01)
+  classInterval <- classIntervals(dataSequence, n=numQuantiles, style="quantile")
+  palette1 <- findColours(classInterval, c(upperLeftColor, bottomLeftColor))
+  palette2 <- findColours(classInterval, c(upperRightColor, bottomRightColor))
+  colorMatrix <- matrix(nrow = 101, ncol = 101, NA)
+  
+  for(i in 1:101){
+    currentColor <- c(paste(palette1[i]), paste(palette2[i]))
+    colorMatrix[102-i,] <- findColours(classInterval, currentColor)
+  }
+  
+  sequences <- seq(0, 100, (100/numQuantiles))
+  sequences[1] <- 1
+  colorMatrix <- colorMatrix[c(sequences), c(sequences)]
+  
+  return(colorMatrix)
+}
+# The 'bivariate.map' function is used to map two rasters using a color matrix.
+# The function takes five parameters:
+# - rasterx: The first raster to be mapped.
+# - rastery: The second raster to be mapped.
+# - colormatrix: The color matrix to use for mapping the rasters. Default is 'col.matrix'.
+# - nquantiles: The number of quantiles to use when classifying the data. Default is 4.
+# - data: The data to be used for the mapping.
+# Function to handle missing values in the input data
+
+
+# Function to calculate quantiles and assign labels
+
+# Main bivariate.map function
+# bivariate.map2 <- function(rasterx, rastery, colormatrix = col.matrix, nquantiles = 4, data) {
+#   print("beginning of bivariate.map")
+#   # Handle missing values in the input data
+#   rasterx <- handle_missing_values(rasterx, data)
+#   rastery <- handle_missing_values(rastery, data)
+
+#   print("after handling missing values")
+#   # Calculate quantiles and assign labels for rasterx
+#   quantr1 <- calculate_quantiles(rasterx, nquantiles)
+  
+#   # Calculate quantiles and assign labels for rastery
+#   quantr2 <- calculate_quantiles(rastery, nquantiles)
+
+#   print("after calculating quantiles")
+#   # Map colors based on quantiles
+#   cols <- map_colors(quantr1, quantr2, colormatrix)
+
+#   # Update rasterx with mapped colors
+#   rasterx[1:length(rasterx)] <- cols
+  
+#   return(rasterx)
+# }
+
+
+handle_missing_values <- function(x, data) {
+  for (ele in 1:length(data$sum_household)) {
+    if (data$sum_household[ele] == 0 & x[ele] == 0) {
+      x[ele] <- NA
     }
   }
-  
-  
+  return(x)
+}
+
+# Helper function to calculate quantiles
+calculate_quantiles <- function(quanmean, nquantiles) {
   temp <- data.frame(quanmean, quantile=rep(NA, length(quanmean)))
   brks <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  print(brks)
+  #print(brks)
   r1 <- tryCatch({
     within(temp, quantile <- cut(quanmean, breaks = brks, labels = 2:length(brks),include.lowest = TRUE))},
     error = function(e) {
       within(temp, quantile <- cut(quanmean, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
     })
     
-  quantr<-data.frame(r1[,2]) 
-  quanvar<-rastery
-  for(ele in 1:length(data$sum_household)){
-    if(data$sum_household[ele] == 0 & quanvar[ele] == 0){
-      quanvar[ele] <- NA
-    }
+  quantr<-data.frame(r1[,2])
+  return(quantr)
+}
+
+as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
+
+map_colors <- function(quantile_values1, quantile_values2, color_matrix, raster_values) {
+  col_matrix_updated <- color_matrix
+  unique_colors <- unique(col_matrix_updated)
+  
+  # Update color matrix
+  for (i in 1:length(col_matrix_updated)) {
+    ifelse(is.na(col_matrix_updated[i]), col_matrix_updated[i] <- 1, col_matrix_updated[i] <- which(col_matrix_updated[i] == unique_colors)[1])
   }
-  temp <- data.frame(quanvar, quantile=rep(NA, length(quanvar)))
-  brks1 <- with(temp, quantile(temp,na.rm=TRUE, probs = c(seq(0,1,1/nquantiles))))
-  print(brks1)
-  r2 <- tryCatch({
-    within(temp, quantile <- cut(quanvar, breaks = brks1, labels = 2:length(brks),include.lowest = TRUE))},
-    error = function(e) {
-      within(temp, quantile <- cut(quanvar, breaks = 4, labels = 2:length(brks),include.lowest = TRUE))
-    })
-  quantr2<-data.frame(r2[,2])
-  as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
-  col.matrix2<-colormatrix
-  cn<-unique(col.matrix2)
-  for(i in 1:length(col.matrix2)){
-    ifelse(is.na(col.matrix2[i]),col.matrix2[i]<-1,col.matrix2[i]<-which(col.matrix2[i]==cn)[1])}
-  cols<-numeric(length(quantr[,1]))
-  for(i in 1:length(quantr[,1])){
-    a<-as.numeric.factor(quantr[i,1])
-    b<-as.numeric.factor(quantr2[i,1])
-    cols[i]<-as.numeric(col.matrix2[b,a])}
-  r<-rasterx
-  r[1:length(r)]<-cols
-  return(r)}
+  
+  cols <- numeric(length(quantile_values1[, 1]))
+  
+  # Map colors based on quantile values
+  for (i in 1:length(quantile_values1[, 1])) {
+    quantile_index1 <- as.numeric.factor(quantile_values1[i, 1])
+    quantile_index2 <- as.numeric.factor(quantile_values2[i, 1])
+    cols[i] <- as.numeric(col_matrix_updated[quantile_index2, quantile_index1])
+  }
+  
+  result_raster <- raster_values
+  result_raster[1:length(result_raster)] <- cols
+  
+  return(result_raster)
+}
+
+bivariate.map<-function(rasterx, rastery, colormatrix=col.matrix, nquantiles=4, data){
+
+  quanmean <- handle_missing_values(rasterx, data)
+  quanvar  <- handle_missing_values(rastery, data)
+  
+  # Calculate quantiles and assign labels
+  quantr  <- calculate_quantiles(quanmean, nquantiles)  
+  quantr2 <- calculate_quantiles(quanvar, nquantiles)
+  
+  
+  result <- map_colors(quantr, quantr2, colormatrix, rasterx)
+  return(result)
+  
+  }
+
+
+
+
+# Main bivariate.map function
+
 
 function(input, output, session) {
   ## Interactive Map ###########################################
   # Create the map
 
   block <- eventReactive(input$addDim, {
-    print(input$store)
-    print("inside block")
-    print(latestDim)
+    #print(input$store)
+    #print("inside block")
+    #print(latestDim)
     joinTable <- readRDS("cap_data/joinTable.rds")
     extraList = c()
     if(latestDim != ""){
@@ -139,18 +219,20 @@ function(input, output, session) {
       extraList = c(extraList, newVal)
     }
     
-    print(storeNames)
+    #print(storeNames)
     sumData(joinTable,extraList = extraList)
     }, ignoreNULL = FALSE)
 
-
+  # The observeEvent function is used to monitor the 'addDim' input. 
+  # When 'addDim' input changes, this function is invoked.
+  # The function checks if 'dim' input is not in the 'store' names, checks if length of 'store' names is less than 10,
+  # and also checks if 'dim' input does not have any non-word characters.
+  # If all conditions are met, the function updates the store with new value, updates 'latestDim' global variable, 
+  # sends a custom message to client-side, and invokes 'block' function.
   observeEvent(input$addDim, {
     if(!input$dim %in% names(input$store) & length(names(input$store)) < 10 & regexpr("\\W+",input$dim ) == -1){
-      print("adding the new function")
-      print(tableTextGlobal)
       tableTextGlobal<- strsplit(tableTextGlobal, "summarize")
       extracted <- tableTextGlobal[[1]][2]
-      print(extracted)
       extracted <- substr(extracted,15,nchar(extracted)-1)
       updateStore(session, input$dim, extracted)
       assign("latestDim",paste(input$dim, extracted, sep ="---") , envir = .GlobalEnv)
@@ -160,55 +242,40 @@ function(input, output, session) {
     #
     })
     
-    #cat(extracted,input$dim,"\n",file="dim.txt",append=TRUE)
-    #session$sendCustomMessage(type = 'testmessage', message = list(dimNAme = input$dim, dimVal = extracted))
-
-    # vars[input$dim] <- input$dim
-    # colHash[input$dim] <- input$dim
-    # updateSelectInput(session = session,inputId = "x_color",choices = vars)
-    # updateSelectInput(session = session,inputId = "y_color",choices = vars)
+    
   output$testOutput <- renderText({ 
     table <- read.csv("asset-map.csv")
     as.character(table[table$X == input$attr,]["X.1"]$X.1)
-  })  
-  
-  observe({
-    print(input$attr)
-    splitList <- strsplit(input$attr, "[.]")[[1]]
-    val2 <- paste0(splitList[length(splitList)],"_" ,input$func)
-    val2 <- stri_replace_all(val2,"_",fixed = ".")
-    val2 <- stri_replace_all(val2,"_",fixed = " ")
-    updateTextInput(session = session, inputId = "dim", value = val2 )
+  })
+
+  # The observe function monitors reactive expressions and executes the given code block
+  # whenever those expressions change. This function is useful for causing side effects,
+  # such as generating plots or tables based on user inputs, or saving user inputs to disk.
+  # The observe function can also be used to create a dependency chain among reactive
+  # expressions, where a change in one expression triggers a change in another.
     
-    if(input$attr %in% modifiedName){
-    choices <- eval(parse(text = paste0("levels(asset$",input$attr,")")))
-    if(typeFunc(input$attr) == "non-numeric"){
-      for(ele in choices){
-      choices <- c(choices,paste0("Percentage ",ele))
+  observe({
+      selectedAttribute <- input$attr
+      #print(selectedAttribute)
+      splitAttributeList <- strsplit(selectedAttribute, "[.]")[[1]]
+      modifiedValue <- paste0(splitAttributeList[length(splitAttributeList)],"_" ,input$func)
+      modifiedValue <- stri_replace_all(modifiedValue,"_",fixed = ".")
+      modifiedValue <- stri_replace_all(modifiedValue,"_",fixed = " ")
+      updateTextInput(session = session, inputId = "dim", value = modifiedValue )
+      
+      if(selectedAttribute %in% modifiedName){
+        attributeChoices <- eval(parse(text = paste0("levels(asset$",selectedAttribute,")")))
       }
-    }
-    else{
-      choices <- c("sum", "mean","sd")
-    }
-    if(input$func == ""){
-      updateSelectInput(session = session, inputId = "func", choices = choices)
-      }
-    else{
-    updateSelectInput(session = session, inputId = "func", choices = choices, selected = input$func)
-    }
-    }
-    })
-  
-  
+  })
+
   output$legend_color <- renderPlot({
-    col.matrix <- colmat.print(nquantiles=4, xlab = input$x_color, ylab = input$y_color)
+    col.matrix <- colmat.print(numQuantiles=4, xLabel = input$x_color, yLabel = input$y_color)
   })
   
   output$editor <- DT::renderDataTable({
     data.table(val1 = names(input$store),val2 = input$store)
   })
-  
-  
+    
   output$map <- renderLeaflet({
     leaflet( ) %>%
       addTiles() %>%
@@ -218,7 +285,7 @@ function(input, output, session) {
   
   output$dimbuilder <- DT::renderDataTable({
     if(input$attr %in% modifiedName){
-    print(input$attr)
+    #print(input$attr)
     inputText <- paste(input$func,"(",input$attr," == 'yes')",sep="")    
     levels1 <- levels(eval(parse(text = paste0("asset$",input$attr))))
     attrType <- typeFunc(input$attr)
@@ -322,7 +389,7 @@ function(input, output, session) {
       return(l)
     }  
     
-    col.matrix <- colmat(nquantiles=4)
+    col.matrix <- colmat(numQuantiles=4)
     result <- tryCatch({
           x <- bivariate.map(dist[[colHash[[x_color_by]]]],dist[[colHash[[y_color_by]]]], colormatrix=col.matrix, nquantiles=4, data = dist)},
       error = function(e) { })
@@ -360,7 +427,7 @@ function(input, output, session) {
   
     findDistrict <- block()[block()$block == findDistrictinDist$Block &  block()$district == findDistrictinDist$District,]
     
-    print(findDistrict)
+    #print(findDistrict)
     popupTagList <- tagList(
       tags$h4("District",findDistrict$district,"- Block",findDistrict$block), 
       tags$h4("Total Residents: ",findDistrict$sum_household),
@@ -447,4 +514,3 @@ function(input, output, session) {
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
 }
-
